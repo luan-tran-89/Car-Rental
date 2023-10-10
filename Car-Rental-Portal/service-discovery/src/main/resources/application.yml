@@ -1,0 +1,11 @@
+eureka:
+    client:
+        fetchRegistry: false
+        registerWithEureka: false
+    server:
+        maxThreadsForPeerReplication: 0
+server:
+    port: 8888
+spring:
+    application:
+        name: service-discovery
