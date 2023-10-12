@@ -1,23 +1,25 @@
 package rentalservice.domain;
 
-import jakarta.persistence.*;
 import lombok.Data;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
-@Entity
 @Data
+@Entity
 public class Rental {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer rentalId;
 
-    @Column(nullable = false)
-    private Integer carId;
+    @ManyToOne
+    @JoinColumn(name="car_id", nullable = false)
+    private Car car;
 
-    @Column(nullable = false)
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
+    private User user;
 
     @Column(nullable = false)
     private Date startDate;
@@ -25,6 +27,11 @@ public class Rental {
     @Column(nullable = false)
     private Date endDate;
 
-    private Integer paymentId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
+    // Additional methods, attributes, or annotations can be added as required.
 }
+
 
