@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>Car-Rental-Portal</artifactId>
-		<groupId>com.example</groupId>
+		<groupId>com.edu.miu</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>com.edu.miu</groupId>
 	<artifactId>service-discovery</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>service-discovery</name>

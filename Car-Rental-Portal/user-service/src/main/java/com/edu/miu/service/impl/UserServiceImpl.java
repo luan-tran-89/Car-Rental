@@ -1,16 +1,19 @@
 package com.edu.miu.service.impl;
 
+import com.edu.miu.dto.RegisterUserDto;
 import com.edu.miu.dto.UserDto;
 import com.edu.miu.entity.User;
 import com.edu.miu.enums.UserStatus;
 import com.edu.miu.mapper.UserMapper;
+import com.edu.miu.model.BusinessException;
+import com.edu.miu.model.PaymentMethodRequest;
 import com.edu.miu.repo.UserRepository;
 import com.edu.miu.service.UserService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * @author gasieugru
@@ -25,25 +28,41 @@ public class UserServiceImpl implements UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private User findByEmail(String email) throws BusinessException {
+        var user = userRepository.findByEmail(email);
+        return Optional.ofNullable(user)
+                .orElseThrow(() -> new BusinessException(String.format("User %s not found", email)));
+    }
+
     @Override
-    public UserDto createUser(UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+    public UserDto getUserByEmail(String email) throws BusinessException {
+        var user = this.findByEmail(email);
         return userMapper.toDto(user);
     }
 
     @Override
-    public boolean disableCustomer(String email) {
-        User user = userRepository.findByEmail(email);
-
-        if (user == null) {
-            return false;
+    public UserDto createUser(RegisterUserDto userDto) throws BusinessException {
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new BusinessException(String.format("User %s already exists", userDto.getEmail()));
         }
 
+        User user = userMapper.toEntity(userDto);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user = userRepository.save(user);
+        return userMapper.toDto(user);
+    }
+
+    @Override
+    public boolean disableCustomer(String email) throws BusinessException {
+        User user = this.findByEmail(email);
         user.setStatus(UserStatus.DISABLE);
         userRepository.save(user);
-
         return true;
+    }
+
+    @Override
+    public void addPaymentMethod(String email, PaymentMethodRequest paymentMethodRequest) throws BusinessException {
+        var user = this.findByEmail(email);
+
     }
 }

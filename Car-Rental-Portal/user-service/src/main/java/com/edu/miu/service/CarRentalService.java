@@ -7,8 +7,19 @@ import java.util.List;
  */
 public interface CarRentalService {
 
-    List<Object> getCurrentReservations(String userId);
+    /**
+     * Get Current Reservations
+     *
+     * @param email
+     * @return list of reservations
+     */
+    List<Object> getCurrentReservations(String email);
 
-    List<Object> getRentalHistory();
+    /**
+     * Get Rental History for user
+     * @param email
+     * @return list of rental history for user
+     */
+    List<Object> getRentalHistory(String email);
 
 }

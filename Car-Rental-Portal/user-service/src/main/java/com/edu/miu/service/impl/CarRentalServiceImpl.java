@@ -12,12 +12,12 @@ import java.util.List;
 public class CarRentalServiceImpl implements CarRentalService {
 
     @Override
-    public List<Object> getCurrentReservations(String userId) {
+    public List<Object> getCurrentReservations(String email) {
         return null;
     }
 
     @Override
-    public List<Object> getRentalHistory() {
+    public List<Object> getRentalHistory(String email) {
         return null;
     }
 }
