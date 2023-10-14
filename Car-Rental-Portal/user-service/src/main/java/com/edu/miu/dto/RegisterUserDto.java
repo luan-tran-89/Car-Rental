@@ -48,5 +48,5 @@ public class RegisterUserDto {
 
     private UserStatus status = UserStatus.ACTIVE;
 
-    private FrequentRenterType frequentRentalType = FrequentRenterType.NONE;
+    private FrequentRenterType frequentRenterType = FrequentRenterType.NONE;
 }

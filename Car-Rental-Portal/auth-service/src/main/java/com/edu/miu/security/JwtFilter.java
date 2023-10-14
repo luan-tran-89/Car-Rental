@@ -32,9 +32,9 @@ public class JwtFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             var token = authorizationHeader.substring(7);
             var isValidToken = jwtHelper.validateToken(token);
-            var email = jwtHelper.getUsernameFromToken(token);
 
             if (isValidToken && SecurityContextHolder.getContext().getAuthentication() == null) {
+                var email = jwtHelper.getEmailFromToken(token);
                 var userDetails = userDetailsService.loadUserByUsername(email);
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

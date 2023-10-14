@@ -62,7 +62,7 @@ public class UserServiceTest {
                 .email("abc@gmail.com")
                 .status(UserStatus.ACTIVE)
                 .userRole(Role.CUSTOMER)
-                .frequentRentalType(FrequentRenterType.NONE)
+                .frequentRenterType(FrequentRenterType.NONE)
                 .phone("2061237894")
                 .password(bCryptPasswordEncoder.encode("123"))
                 .build();
@@ -74,7 +74,7 @@ public class UserServiceTest {
                 .email("abc@gmail.com")
                 .status(UserStatus.ACTIVE)
                 .userRole(Role.CUSTOMER)
-                .frequentRentalType(FrequentRenterType.NONE)
+                .frequentRenterType(FrequentRenterType.NONE)
                 .phone("2061237894")
                 .password("123")
                 .build();

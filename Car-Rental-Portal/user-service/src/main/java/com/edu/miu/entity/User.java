@@ -51,6 +51,6 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "frequent_rental_type", columnDefinition = "")
-    private FrequentRenterType frequentRentalType = FrequentRenterType.NONE;
+    private FrequentRenterType frequentRenterType = FrequentRenterType.NONE;
 
 }
