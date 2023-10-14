@@ -1,11 +1,18 @@
 package com.edu.miu.controller;
 
+import com.edu.miu.dto.ErrorResponse;
 import com.edu.miu.model.LoginRequest;
 import com.edu.miu.model.RefreshTokenRequest;
+import com.edu.miu.security.AuthHelper;
 import com.edu.miu.service.LoginService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,21 +25,33 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/uaa")
 @RequiredArgsConstructor
-@Tag(name = "User Authentication", description = "Business User Authentication Services")
+@OpenAPIDefinition(servers = { @Server(url = "Auth-service")},
+        info = @Info(title = "Car Rental System - Auth Service", version = "v1",
+                description = "This is a documentation for the Auth Service"))
 public class UserAuthController {
 
     private final LoginService loginService;
 
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        var loginResponse = loginService.login(loginRequest);
-        return ResponseEntity.ok(loginResponse);
+        try {
+            var loginResponse = loginService.login(loginRequest);
+            return ResponseEntity.ok(loginResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
     }
 
     @PostMapping("/refreshToken")
-    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest){
-        var loginResponse = loginService.refreshToken(refreshTokenRequest);
-        return ResponseEntity.ok(loginResponse);
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        try {
+            var loginResponse = loginService.refreshToken(refreshTokenRequest);
+            return ResponseEntity.ok(loginResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
     }
 
 }

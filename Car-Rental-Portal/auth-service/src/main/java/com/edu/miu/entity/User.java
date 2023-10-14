@@ -1,5 +1,6 @@
 package com.edu.miu.entity;
 
+import com.edu.miu.enums.FrequentRenterType;
 import com.edu.miu.enums.Role;
 import com.edu.miu.enums.UserStatus;
 import lombok.Data;
@@ -18,7 +19,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "user_name")
+    private String userName;
+
+    @Column(unique=true)
     private String email;
+
     private String password;
 
     @Column(name = "first_name")
@@ -27,6 +33,8 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    private String phone;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role")
     private Role userRole;
@@ -34,5 +42,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "")
     private UserStatus status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "frequent_renter_type", columnDefinition = "")
+    private FrequentRenterType frequentRenterType = FrequentRenterType.NONE;
 
 }

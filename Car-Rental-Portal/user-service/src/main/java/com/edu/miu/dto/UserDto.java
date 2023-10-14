@@ -31,6 +31,6 @@ public class UserDto {
 
     private UserStatus status;
 
-    private FrequentRenterType frequentRentalType;
+    private FrequentRenterType frequentRenterType;
 
 }
