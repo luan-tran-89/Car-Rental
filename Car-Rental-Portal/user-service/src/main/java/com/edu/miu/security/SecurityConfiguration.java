@@ -3,6 +3,7 @@ package com.edu.miu.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -54,8 +55,9 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/uaa").permitAll()
-                .antMatchers("/uaa/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/users").authenticated()
+                .antMatchers("/users/**").permitAll()
+                .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/webjars/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/swagger-ui/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
