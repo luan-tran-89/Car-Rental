@@ -1,7 +1,7 @@
 package rentalservice;
 
 import rentalservice.domain.Rental;
-import rentalservice.domain.PaymentMethod;
+//import rentalservice.domain.PaymentMethod;
 import rentalservice.domain.Car;
 import rentalservice.domain.User;
 
@@ -78,5 +78,5 @@ public interface RentalService {
      * @param paymentMethod The payment details to be added.
      * @return True if payment method was added successfully, false otherwise.
      */
-    boolean addPaymentMethod(Integer userId, PaymentMethod paymentMethod);
+   // boolean addPaymentMethod(Integer userId, PaymentMethod paymentMethod);
 }

@@ -2,15 +2,13 @@ package rentalservice.controller;
 
 import rentalservice.RentalService;
 import rentalservice.domain.Rental;
-import rentalservice.domain.PaymentMethod;
-import rentalservice.domain.Car;
-import rentalservice.domain.User;
+import rentalservice.domain.PaymentMethod;  // Make sure to import PaymentMethod
+import rentalservice.DTO.ReservationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +20,13 @@ public class RentalController {
     private RentalService rentalService;
 
     @PostMapping("/reserve")
-    public ResponseEntity<Rental> reserveCar(@RequestBody Car car, @RequestBody User user, @RequestParam Date startDate, @RequestParam Date endDate) {
-        Rental newRental = rentalService.reserveCar(car, user, startDate, endDate);
+    public ResponseEntity<Rental> reserveCar(@RequestBody ReservationDTO reservation) {
+        Rental newRental = rentalService.reserveCar(
+                reservation.getCar(),
+                reservation.getUser(),
+                reservation.getStartDate(),
+                reservation.getEndDate()
+        );
         return new ResponseEntity<>(newRental, HttpStatus.CREATED);
     }
 
@@ -40,7 +43,7 @@ public class RentalController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Rental> createRental(@RequestBody Rental rental) {
         Rental createdRental = rentalService.createRental(rental);
         return new ResponseEntity<>(createdRental, HttpStatus.CREATED);
