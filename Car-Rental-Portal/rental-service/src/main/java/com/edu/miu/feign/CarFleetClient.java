@@ -1,9 +1,9 @@
-package rentalservice.feign;
+package com.edu.miu.feign;
 
+import com.edu.miu.domain.Car;
+import com.edu.miu.enums.CarStatus;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
-import rentalservice.domain.Car;
-import rentalservice.enums.CarStatus;
 
 @FeignClient(name = "car-fleet-service")
 public interface CarFleetClient {

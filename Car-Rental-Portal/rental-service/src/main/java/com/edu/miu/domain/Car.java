@@ -1,9 +1,9 @@
-package rentalservice.domain;
+package com.edu.miu.domain;
 
-import jakarta.persistence.*;
+import com.edu.miu.enums.CarStatus;
 import lombok.Data;
-import rentalservice.enums.CarStatus;
 
+import javax.persistence.*;
 @Data
 @Entity
 public class Car {

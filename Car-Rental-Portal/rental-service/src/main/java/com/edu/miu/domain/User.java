@@ -1,9 +1,10 @@
-package rentalservice.domain;
+package com.edu.miu.domain;
 
-import jakarta.persistence.*;
+import com.edu.miu.enums.FrequentRenterType;
 import lombok.Data;
-import rentalservice.enums.FrequentRenterType;
-import rentalservice.enums.UserRole;
+import com.edu.miu.enums.UserRole;
+
+import javax.persistence.*;
 
 @Data
 @Entity

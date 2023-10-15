@@ -1,4 +1,4 @@
-package rentalservice.enums;
+package com.edu.miu.enums;
 
 public enum PaymentMethodType {
     VISA,

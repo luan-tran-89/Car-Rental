@@ -1,10 +1,11 @@
-package rentalservice.domain;
+package com.edu.miu.domain;
 
 import lombok.Data;
-import jakarta.persistence.*;
-import rentalservice.enums.PaymentMethodType;
-import rentalservice.enums.PaymentStatus;
 
+import com.edu.miu.enums.PaymentMethodType;
+import com.edu.miu.enums.PaymentStatus;
+
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
