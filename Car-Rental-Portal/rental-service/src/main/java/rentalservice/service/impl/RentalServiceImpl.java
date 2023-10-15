@@ -1,26 +1,29 @@
-package rentalservice;
+package rentalservice.service.impl;
 
-import rentalservice.domain.Rental;
-import rentalservice.domain.PaymentMethod;
-import rentalservice.domain.Car;
-import rentalservice.domain.User;
-//import rentalservice.domain.FrequentRenterType;
+import rentalservice.domain.*;
 import rentalservice.enums.CarStatus;
 import rentalservice.enums.UserRole;
+import rentalservice.feign.CarFleetClient;
 import rentalservice.repository.RentalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rentalservice.service.KafkaProducerService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Date;
+
 @Service
 public class RentalServiceImpl implements rentalservice.RentalService {
 
     @Autowired
     private RentalRepository rentalRepository;
 
-    // ... other required repositories and services like CarRepository, UserRepository, PaymentService...
+    @Autowired
+    private KafkaProducerService kafkaProducerService;
+
+    @Autowired
+    private CarFleetClient carFleetClient;
 
     @Override
     public List<Rental> findAllRentals() {
@@ -35,20 +38,20 @@ public class RentalServiceImpl implements rentalservice.RentalService {
     @Override
     public Rental reserveCar(Car car, User user, Date startDate, Date endDate) {
         car.setStatus(CarStatus.RESERVED);
-        // ... logic to update car in its repository...
+
+        String message = "{\"carId\":" + car.getCarId() + ", \"status\":\"RESERVED\"}";
+        kafkaProducerService.sendMessage("carStatusTopic", message);
 
         Rental rental = new Rental();
         rental.setCar(car);
         rental.setUser(user);
         rental.setStartDate(startDate);
         rental.setEndDate(endDate);
-
         return rentalRepository.save(rental);
     }
 
     @Override
     public Rental createRental(Rental rental) {
-        // Calculate rental cost
         Car car = rental.getCar();
         double totalCost = car.getFixedCost() + car.getCostPerDay() * daysBetween(rental.getStartDate(), rental.getEndDate());
 
@@ -56,7 +59,7 @@ public class RentalServiceImpl implements rentalservice.RentalService {
         if (user.getRole() == UserRole.FREQUENT_RENTER) {
             totalCost = totalCost * (1 - user.getFrequentRenterType().getDiscount());
         }
-        // Store total cost in the Rental (if there's an attribute for it) or proceed to payment
+        // Here, you might want to set the totalCost to the rental before saving.
 
         return rentalRepository.save(rental);
     }
@@ -68,7 +71,16 @@ public class RentalServiceImpl implements rentalservice.RentalService {
 
     @Override
     public void deleteRental(Integer id) {
-        rentalRepository.deleteById(id);
+        Optional<Rental> rental = rentalRepository.findById(id);
+        if (rental.isPresent()) {
+            Car car = rental.get().getCar();
+            car.setStatus(CarStatus.AVAILABLE);
+
+            String message = "{\"carId\":" + car.getCarId() + ", \"status\":\"AVAILABLE\"}";
+            kafkaProducerService.sendMessage("carStatusTopic", message);
+
+            rentalRepository.deleteById(id);
+        }
     }
 
     @Override
@@ -76,10 +88,12 @@ public class RentalServiceImpl implements rentalservice.RentalService {
         Optional<Rental> optionalRental = rentalRepository.findById(rentalId);
         if (optionalRental.isPresent()) {
             Rental rental = optionalRental.get();
-            // Process payment...
-            // If payment is successful:
-            rental.getCar().setStatus(CarStatus.PICKED);
-            // ... logic to update car's status in its repository...
+            Car car = rental.getCar();
+            car.setStatus(CarStatus.PICKED);
+
+            String message = "{\"carId\":" + car.getCarId() + ", \"status\":\"PICKED\"}";
+            kafkaProducerService.sendMessage("carStatusTopic", message);
+
             return true;
         }
         return false;
@@ -87,8 +101,8 @@ public class RentalServiceImpl implements rentalservice.RentalService {
 
     @Override
     public boolean addPaymentMethod(Integer userId, PaymentMethod paymentMethod) {
-        // Logic to add & validate payment method
-        // Store payment method in DB, verify it if necessary...
+        // Your logic to add & validate payment method
+        // This might be dependent on how you've designed the system.
         return true;
     }
 
