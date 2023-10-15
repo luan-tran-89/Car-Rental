@@ -1,4 +1,4 @@
-package rentalservice.enums;
+package com.edu.miu.enums;
 
 public enum FrequentRenterType {
     NONE(0.0), // No discount for NONE type

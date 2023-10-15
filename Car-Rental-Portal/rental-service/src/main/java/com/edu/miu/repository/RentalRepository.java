@@ -1,8 +1,8 @@
-package rentalservice.repository;
+package com.edu.miu.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import rentalservice.domain.Rental;
+import com.edu.miu.domain.Rental;
 
 import java.util.Date;
 import java.util.List;

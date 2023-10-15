@@ -1,9 +1,9 @@
-package rentalservice;
+package com.edu.miu.service;
 
-import rentalservice.domain.Rental;
+import com.edu.miu.domain.Rental;
 //import rentalservice.domain.PaymentMethod;
-import rentalservice.domain.Car;
-import rentalservice.domain.User;
+import com.edu.miu.domain.Car;
+import com.edu.miu.domain.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,13 +32,13 @@ public interface RentalService {
     /**
      * Reserves a car for a user for a specified date range.
      *
-     * @param car The car to be reserved.
-     * @param user The user making the reservation.
+     * @param carId The ID of the car to be reserved.
+     * @param userId The ID of the user making the reservation.
      * @param startDate The start date of the reservation.
      * @param endDate The end date of the reservation.
      * @return Details of the reserved rental.
      */
-    Rental reserveCar(Car car, User user, Date startDate, Date endDate);
+    Rental reserveCar(Integer carId, Integer userId, Date startDate, Date endDate);
 
     /**
      * Creates a new rental.
@@ -71,12 +71,16 @@ public interface RentalService {
      */
     boolean completeRental(Integer rentalId);
 
+    // to check if the customer is an active rental before we disable him
+    boolean isUserCurrentlyRenting(Integer userId);
+
+
     /**
      * Adds a payment method for a user.
      *
      * @param userId ID of the user to whom the payment method will be added.
-     * @param paymentMethod The payment details to be added.
+     * @param paymentMethodId The ID of the payment details to be added.
      * @return True if payment method was added successfully, false otherwise.
      */
-   // boolean addPaymentMethod(Integer userId, PaymentMethod paymentMethod);
+    // boolean addPaymentMethod(Integer userId, Integer paymentMethodId);
 }

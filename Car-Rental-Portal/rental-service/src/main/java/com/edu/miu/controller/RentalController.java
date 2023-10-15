@@ -1,9 +1,8 @@
-package rentalservice.controller;
+package com.edu.miu.controller;
 
-import rentalservice.RentalService;
-import rentalservice.domain.Rental;
-import rentalservice.domain.PaymentMethod;  // Make sure to import PaymentMethod
-import rentalservice.DTO.ReservationDTO;
+import com.edu.miu.service.RentalService;
+import com.edu.miu.domain.Rental;
+import com.edu.miu.dto.ReservationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +21,8 @@ public class RentalController {
     @PostMapping("/reserve")
     public ResponseEntity<Rental> reserveCar(@RequestBody ReservationDTO reservation) {
         Rental newRental = rentalService.reserveCar(
-                reservation.getCar(),
-                reservation.getUser(),
+                reservation.getCarId(),
+                reservation.getUserId(),
                 reservation.getStartDate(),
                 reservation.getEndDate()
         );
@@ -71,6 +70,16 @@ public class RentalController {
         }
     }
 
+
+    @GetMapping("/user/{userId}/active-rentals")
+    public ResponseEntity<Boolean> checkUserActiveRentals(@PathVariable Integer userId) {
+        boolean isRenting = rentalService.isUserCurrentlyRenting(userId);
+        return new ResponseEntity<>(isRenting, HttpStatus.OK);
+    }
+
+
+    // Uncomment and adapt the below method once you've decided on the structure for PaymentMethod or its ID equivalent.
+    /*
     @PostMapping("/{userId}/add-payment-method")
     public ResponseEntity<Boolean> addPaymentMethod(@PathVariable Integer userId, @RequestBody PaymentMethod paymentMethod) {
         boolean added = rentalService.addPaymentMethod(userId, paymentMethod);
@@ -80,4 +89,5 @@ public class RentalController {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
+    */
 }
