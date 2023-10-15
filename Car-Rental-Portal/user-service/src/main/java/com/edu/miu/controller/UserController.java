@@ -44,7 +44,7 @@ public class UserController {
     private final AuthHelper authHelper;
 
     @PostMapping("/manager/add")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity createManager(@RequestBody RegisterUserDto userDto) {
         try {
             userDto.setUserRole(Role.MANAGER);
@@ -57,8 +57,22 @@ public class UserController {
         }
     }
 
+    @PutMapping("/manager/disable/{email}")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity disableManager(@PathVariable("email") String email) {
+        try {
+            boolean success = userService.disableManager(email);
+            return ResponseEntity.ok()
+                    .body(String.format("The manager %s is disabled %s" , email, success ? "successfully" : "failed"));
+        } catch (BusinessException e) {
+            LOGGER.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+
     @PutMapping("/disable/{email}")
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity disableCustomer(@PathVariable("email") String email) {
         try {
             boolean success = userService.disableCustomer(email);
@@ -87,7 +101,17 @@ public class UserController {
     @GetMapping
     public ResponseEntity getUser(@RequestParam(name = "email", defaultValue = "") String email) {
         try {
-            if (Role.CUSTOMER == authHelper.getRole() && !email.equals(authHelper.getEmail())) {
+            boolean isNotSameEmail = !email.equals(authHelper.getEmail());
+            if (Role.CUSTOMER == authHelper.getRole() && isNotSameEmail) {
+                return ResponseEntity.ok()
+                        .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name()));
+            }
+
+            UserDto userDto = userService.getUserByEmail(email);
+
+            if (isNotSameEmail && authHelper.getRole() == Role.MANAGER &&
+                    (userDto.getUserRole() == Role.MANAGER || userDto.getUserRole() == Role.ADMIN)
+            ) {
                 return ResponseEntity.ok()
                         .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name()));
             }

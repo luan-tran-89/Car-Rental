@@ -26,6 +26,14 @@ public interface UserService {
     UserDto createUser(RegisterUserDto userDto) throws BusinessException;
 
     /**
+     * Disable Manager
+     * @param email
+     * @return true if successful otherwise false
+     * @throws BusinessException
+     */
+    boolean disableManager(String email) throws BusinessException;
+
+    /**
      * Disable Customer
      * @param email
      * @return true if successful otherwise false

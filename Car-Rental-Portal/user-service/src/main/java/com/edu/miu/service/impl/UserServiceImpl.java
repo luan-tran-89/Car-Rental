@@ -3,6 +3,7 @@ package com.edu.miu.service.impl;
 import com.edu.miu.dto.RegisterUserDto;
 import com.edu.miu.dto.UserDto;
 import com.edu.miu.entity.User;
+import com.edu.miu.enums.Role;
 import com.edu.miu.enums.UserStatus;
 import com.edu.miu.mapper.UserMapper;
 import com.edu.miu.model.BusinessException;
@@ -53,8 +54,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean disableManager(String email) throws BusinessException {
+        User user = this.findByEmail(email);
+
+        if (user.getUserRole() != Role.MANAGER) {
+            throw new BusinessException(String.format("You can't disable user %s with role %s", user.getEmail(), user.getUserRole()));
+        }
+        user.setStatus(UserStatus.DISABLE);
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
     public boolean disableCustomer(String email) throws BusinessException {
         User user = this.findByEmail(email);
+        if (user.getUserRole() != Role.CUSTOMER) {
+            throw new BusinessException(String.format("You can't disable user %s with role %s", user.getEmail(), user.getUserRole()));
+        }
         user.setStatus(UserStatus.DISABLE);
         userRepository.save(user);
         return true;

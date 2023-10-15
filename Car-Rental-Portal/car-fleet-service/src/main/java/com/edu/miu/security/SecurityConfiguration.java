@@ -5,13 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,9 +19,7 @@ import java.util.List;
 /**
  * @author gasieugru
  */
-
-@EnableGlobalMethodSecurity(
-        prePostEnabled = true,
+@EnableGlobalMethodSecurity(prePostEnabled = true,
         jsr250Enabled = true,
         securedEnabled = true
 )
@@ -40,29 +35,28 @@ public class SecurityConfiguration {
         add("/swagger-ui/**");
         add("/swagger-ui.html");
         add("/swagger-resources/**");
-        add("/webjars/**");
         add("/webjars/swagger-ui/**");
     }};
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors()
                 .and()
-                .csrf()
-                .disable()
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(this.getPrefixPaths(SWAGGER_PATH, null)).permitAll()
-                .antMatchers(HttpMethod.GET, "/users").authenticated()
-//                .antMatchers("/users/**").permitAll()
-                .antMatchers("/users/register").permitAll()
-                .antMatchers("/users/manager/**").hasAnyRole("ADMIN")
-                .antMatchers("/users/disable/**").hasAnyRole("ADMIN", "MANAGER")
+                .antMatchers(HttpMethod.GET,"/car-fleet/**").permitAll()
+//                .antMatchers(HttpMethod.GET,"/car-fleet/maintenance-history", "/car-fleet/car-rental-report", "/car-fleet/export-car-rental-report")
+//                    .hasAnyRole("ADMIN", "MANAGER")
+//                .antMatchers(HttpMethod.PUT,"/car-fleet/maintenance/**")
+//                    .hasAnyRole("ADMIN", "MANAGER")
+                .antMatchers(HttpMethod.POST,"/car-fleet/**")
+                    .hasAnyRole("ADMIN", "MANAGER")
+                .antMatchers(HttpMethod.PUT,"/car-fleet/**")
+                    .hasAnyRole("ADMIN", "MANAGER")
+                .antMatchers(HttpMethod.DELETE,"/car-fleet/**")
+                    .hasAnyRole("ADMIN", "MANAGER")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -74,6 +68,11 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     private String[] getPrefixPaths(List<String> paths, String prefix) {
         List<String> result = paths;
         if (StringUtils.isNotBlank(prefix)) {
@@ -81,4 +80,5 @@ public class SecurityConfiguration {
         }
         return result.toArray(new String[0]);
     }
+
 }
