@@ -1,9 +1,12 @@
 package com.edu.miu.security;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.json.JSONParser;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -33,7 +36,9 @@ public class JwtFilter extends OncePerRequestFilter {
             var token = authorizationHeader.substring(7);
             var isValidToken = jwtHelper.validateToken(token);
 
-            if (isValidToken && SecurityContextHolder.getContext().getAuthentication() == null) {
+            var auth = SecurityContextHolder.getContext().getAuthentication();
+
+            if (isValidToken && (auth == null || auth instanceof AnonymousAuthenticationToken)) {
                 var claims = jwtHelper.getPayloadFromToken(token);
                 AwesomeUserDetails userDetails = modelMapper.map(claims.get("user"), AwesomeUserDetails.class);
 

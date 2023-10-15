@@ -14,19 +14,18 @@ import java.util.Map;
  */
 @Component
 public class JwtHelper {
-
     @Value("${jwt.secret-key:top-secret}")
     private String secret;
 
-    @Value("${jwt.expiration:600}")
+    @Value("${jwt.expiration:600000}")
     private long expiration;
 
     public String generateToken(AwesomeUserDetails user) {
         return Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .claim("role", user.getRole())
+                .claim("user", user)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
@@ -34,7 +33,6 @@ public class JwtHelper {
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
-                .setPayload("")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(SignatureAlgorithm.HS512, secret)
@@ -43,10 +41,10 @@ public class JwtHelper {
 
     public String generateRefreshToken(AwesomeUserDetails user) {
         return Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 60))
-                .claim("role", user.getRole())
+                .claim("user", user)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
@@ -96,7 +94,7 @@ public class JwtHelper {
     }
 
 
-    public String getUsernameFromToken(String token) {
+    public String getEmailFromToken(String token) {
         String result = null;
         try {
             result = Jwts.parser()
@@ -104,6 +102,22 @@ public class JwtHelper {
                     .parseClaimsJws(token)
                     .getBody()
                     .getSubject();
+        } catch (ExpiredJwtException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    public Claims getPayloadFromToken(String token) {
+        Claims result = null;
+        try {
+            result = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (ExpiredJwtException e) {
             System.out.println(e.getMessage());
             throw e;

@@ -8,14 +8,15 @@ import org.springframework.context.annotation.Bean;
 
 @EnableEurekaClient
 @SpringBootApplication
-public class UserServiceApplication {
+public class CarFleetServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserServiceApplication.class, args);
+        SpringApplication.run(CarFleetServiceApplication.class, args);
     }
 
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
 }
