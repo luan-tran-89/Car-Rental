@@ -1,6 +1,5 @@
 package com.edu.miu.service.impl;
 
-import com.edu.miu.controller.CarFleetController;
 import com.edu.miu.dao.CarDao;
 import com.edu.miu.dto.CarDto;
 import com.edu.miu.dto.MaintenanceDto;
@@ -63,6 +62,11 @@ public class CarServiceImpl implements CarService {
     @Override
     public boolean removeCar(int carId) throws BusinessException {
         Car car = this.findById(carId);
+
+        if (car.getStatus() != CarStatus.AVAILABLE) {
+            throw new BusinessException(String.format("The car %s is not available.", carId));
+        }
+
         car.setStatus(CarStatus.DISABLED);
         return true;
     }
@@ -80,11 +84,19 @@ public class CarServiceImpl implements CarService {
         }
 
         if (carDto.getStatus() != null && carDto.getStatus() != car.getStatus()) {
-            car.setMake(carDto.getMake());
+            car.setStatus(carDto.getStatus());
         }
 
-        if (carDto.getPerDayCost() != null && carDto.getPerDayCost() != car.getPerDayCost()) {
-            car.setPerDayCost(carDto.getPerDayCost());
+        if (carDto.getImage() != null && carDto.getImage() != car.getImage()) {
+            car.setImage(carDto.getImage());
+        }
+
+        if (carDto.getCostPerDay() != null && carDto.getCostPerDay() != car.getCostPerDay()) {
+            car.setCostPerDay(carDto.getCostPerDay());
+        }
+
+        if (carDto.getFixedCost() != null && carDto.getFixedCost() != car.getFixedCost()) {
+            car.setFixedCost(carDto.getFixedCost());
         }
 
         carRepository.save(car);
@@ -179,11 +191,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public List<MaintenanceDto> getMaintenanceHistory(int carId) throws BusinessException {
         var car = this.findById(carId);
-        List<MaintenanceDto> maintenanceDtoList = car.getMaintenances()
-                .stream()
-                .map(m -> maintenanceMapper.toDto(m))
-                .collect(Collectors.toList());
-        return maintenanceDtoList;
+        return maintenanceMapper.toListDto(car.getMaintenances());
     }
 
     @Override

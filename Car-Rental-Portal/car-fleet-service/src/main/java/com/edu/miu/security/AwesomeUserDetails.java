@@ -32,6 +32,8 @@ public class AwesomeUserDetails implements UserDetails {
 
     private Role role;
 
+    private String token;
+
     public AwesomeUserDetails(User user) {
         this.email = user.getEmail();
         this.status = user.getStatus();

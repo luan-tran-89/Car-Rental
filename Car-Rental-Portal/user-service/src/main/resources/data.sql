@@ -1,4 +1,4 @@
-INSERT INTO users (user_name, email, first_name, last_name, phone, password, user_role, status, frequent_rental_type)
+INSERT INTO user(user_name, email, first_name, last_name, phone, password, user_role, status, frequent_rental_type)
 VALUES ('admin', 'admin@miu.edu', 'admin', 'admin', '20612346482',
         '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', -- 123
         'ADMIN', 'ACTIVE', 'NONE'),

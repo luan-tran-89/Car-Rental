@@ -1,16 +1,21 @@
 package com.edu.miu.controller;
 
+import com.edu.miu.client.AuthClient;
 import com.edu.miu.dto.ErrorResponse;
 import com.edu.miu.dto.RegisterUserDto;
 import com.edu.miu.dto.UserDto;
 import com.edu.miu.enums.Role;
 import com.edu.miu.model.BusinessException;
+import com.edu.miu.model.LoginRequest;
 import com.edu.miu.model.PaymentMethodRequest;
+import com.edu.miu.model.RefreshTokenRequest;
 import com.edu.miu.security.AuthHelper;
 import com.edu.miu.service.CarRentalService;
 import com.edu.miu.service.UserService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +37,10 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "User Service", description = "Business User Service")
 @OpenAPIDefinition(servers = { @Server(url = "User-service")},
         info = @Info(title = "Car Rental System - User Service", version = "v1",
-                description = "This is a documentation for the User Service"))
+                description = "This is a documentation for the User Service",
+                license = @License(name = "Apache 2.0", url = "http://car-fleet-license.com"),
+                contact = @Contact(url = "http://car-fleet.com", name = "Car Fleet", email = "car-fleet@gmail"))
+)
 public class UserController {
 
     private Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -42,6 +50,23 @@ public class UserController {
     private final CarRentalService carRentalService;
 
     private final AuthHelper authHelper;
+
+    private final AuthClient authClient;
+
+    @PostMapping("/refreshToken")
+    public ResponseEntity refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return ResponseEntity.ok(authClient.refreshToken(refreshTokenRequest));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity getAllCustomers() {
+        return ResponseEntity.ok(userService.getAllCustomers());
+    }
+
+    @GetMapping("/manager/list")
+    public ResponseEntity getAllManagers() {
+        return ResponseEntity.ok(userService.getAllManagers());
+    }
 
     @PostMapping("/manager/add")
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -89,8 +114,21 @@ public class UserController {
     public ResponseEntity register(@RequestBody RegisterUserDto userDto) {
         try {
             userDto.setUserRole(Role.CUSTOMER);
-            var user = userService.createUser(userDto);
-            return ResponseEntity.ok().body(user);
+            userService.createUser(userDto);
+            var response = authClient.login(new LoginRequest(userDto.getEmail(), userDto.getPassword()));
+            return ResponseEntity.ok().body(response);
+        } catch (BusinessException e) {
+            LOGGER.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity getUserById(@PathVariable(name = "userId") int userId) {
+
+        try {
+            return ResponseEntity.ok().body(userService.getUserById(userId));
         } catch (BusinessException e) {
             LOGGER.warn(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -8,7 +8,9 @@ import com.edu.miu.model.CarFilter;
 import com.edu.miu.security.AuthHelper;
 import com.edu.miu.service.CarService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,10 @@ import java.util.List;
 @Tag(name = "Car Fleet Service", description = "Business Car Fleet Service")
 @OpenAPIDefinition(servers = { @Server(url = "Car-Fleet-service")},
         info = @Info(title = "Car Rental System - Car Fleet Service", version = "v1",
-                description = "This is a documentation for the Car Fleet Service"))
+                description = "This is a documentation for the Car Fleet Service",
+                license = @License(name = "Apache 2.0", url = "http://car-fleet-license.com"),
+                contact = @Contact(url = "http://car-fleet.com", name = "Car Fleet", email = "car-fleet@gmail"))
+)
 public class CarFleetController {
     private Logger LOGGER = LoggerFactory.getLogger(CarFleetController.class);
 
@@ -88,9 +93,15 @@ public class CarFleetController {
 
     @GetMapping("/maintenance-history")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseEntity getCarMaintenanceHistory(@RequestParam("carId") int carId) throws BusinessException {
-        List<MaintenanceDto> carMaintenanceDto = carService.getMaintenanceHistory(carId);
-        return ResponseEntity.ok().body(carMaintenanceDto);
+    public ResponseEntity getCarMaintenanceHistory(@RequestParam("carId") int carId) {
+        try {
+            List<MaintenanceDto> carMaintenanceDto = carService.getMaintenanceHistory(carId);
+            return ResponseEntity.ok().body(carMaintenanceDto);
+        } catch (BusinessException e) {
+            LOGGER.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
     }
 
     @PostMapping("/maintenance/{carId}")

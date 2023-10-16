@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: car-fleet-service
+  datasource:
+    password: 12345678
+    url: jdbc:mysql://localhost:3306/car-rental
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+
+  main:
+    allow-bean-definition-overriding: true
+
+  kafka:
+    bootstrap-servers:
+server:
+  port: 8082

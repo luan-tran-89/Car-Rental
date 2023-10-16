@@ -6,7 +6,9 @@ import com.edu.miu.model.RefreshTokenRequest;
 import com.edu.miu.security.AuthHelper;
 import com.edu.miu.service.LoginService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/uaa")
 @RequiredArgsConstructor
+@Tag(name = "Auth Service", description = "Business Auth Service")
 @OpenAPIDefinition(servers = { @Server(url = "Auth-service")},
         info = @Info(title = "Car Rental System - Auth Service", version = "v1",
-                description = "This is a documentation for the Auth Service"))
+                description = "This is a documentation for the Auth Service",
+                license = @License(name = "Apache 2.0", url = "http://car-fleet-license.com"),
+                contact = @Contact(url = "http://car-fleet.com", name = "Car Fleet", email = "car-fleet@gmail")
+        ))
 public class UserAuthController {
 
     private final LoginService loginService;

@@ -1,5 +1,6 @@
 package com.edu.miu.service.impl;
 
+import com.edu.miu.client.RentalClient;
 import com.edu.miu.dto.RegisterUserDto;
 import com.edu.miu.dto.UserDto;
 import com.edu.miu.entity.User;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,6 +26,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final RentalClient rentalClient;
 
     private final UserMapper userMapper;
 
@@ -36,9 +40,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDto> getAllManagers() {
+        return userMapper.toListDto(userRepository.findByUserRole(Role.MANAGER));
+    }
+
+    @Override
+    public List<UserDto> getAllCustomers() {
+        return userMapper.toListDto(userRepository.findByUserRole(Role.CUSTOMER));
+    }
+
+    @Override
     public UserDto getUserByEmail(String email) throws BusinessException {
         var user = this.findByEmail(email);
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public UserDto getUserById(int id) throws BusinessException {
+        var user = userRepository.findById(id);
+        return userMapper.toDto(user.orElseThrow(() -> new BusinessException(String.format("User %s not found", id))));
     }
 
     @Override
@@ -71,6 +91,13 @@ public class UserServiceImpl implements UserService {
         if (user.getUserRole() != Role.CUSTOMER) {
             throw new BusinessException(String.format("You can't disable user %s with role %s", user.getEmail(), user.getUserRole()));
         }
+
+        var isUserCurrentlyRenting = rentalClient.isUserCurrentlyRenting(user.getUserId());
+
+        if (isUserCurrentlyRenting) {
+            throw new BusinessException(String.format("You can't disable user %s because he is renting cars", user.getEmail(), user.getUserRole()));
+        }
+
         user.setStatus(UserStatus.DISABLE);
         userRepository.save(user);
         return true;

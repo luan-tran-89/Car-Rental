@@ -20,8 +20,13 @@ public class AwesomeUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        var user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User %s is not found.", email));
+        }
+
         return new AwesomeUserDetails(user);
     }
 }

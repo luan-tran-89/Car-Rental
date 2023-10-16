@@ -31,11 +31,11 @@ public class Car {
     @Column(nullable = false)
     private CarStatus status = CarStatus.AVAILABLE;
 
-    @Column(name="base_code", nullable = false)
-    private Double baseCost;
+    @Column(name="fixed_cost", nullable = false)
+    private Double fixedCost;
 
-    @Column(name="per_day_cost", nullable = false)
-    private Double perDayCost;
+    @Column(name="cost_per_day", nullable = false)
+    private Double costPerDay;
 
     @OneToMany(mappedBy = "car", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Maintenance> maintenances;
