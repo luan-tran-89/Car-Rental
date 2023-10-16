@@ -4,6 +4,7 @@ import com.edu.miu.domain.Rental;
 //import rentalservice.domain.PaymentMethod;
 import com.edu.miu.domain.Car;
 import com.edu.miu.domain.User;
+import com.edu.miu.dto.RentalDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,15 @@ public interface RentalService {
      *
      * @return List of all rentals.
      */
-    List<Rental> findAllRentals();
+    List<RentalDto> findAllRentals();
+
+    /**
+     * Get Rentals ByCarId
+     *
+     * @param carId
+     * @return list of RentalDto
+     */
+    List<RentalDto> getRentalsByCarId(Integer carId);
 
     /**
      * Fetches a rental by its ID.

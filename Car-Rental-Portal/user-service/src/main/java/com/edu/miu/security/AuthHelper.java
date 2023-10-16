@@ -31,4 +31,8 @@ public class AuthHelper {
     public Role getRole() {
         return getUserDetails().getRole();
     }
+
+    public String getToken() {
+        return getUserDetails().getToken();
+    }
 }

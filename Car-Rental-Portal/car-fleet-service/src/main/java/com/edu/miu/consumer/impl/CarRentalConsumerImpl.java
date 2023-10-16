@@ -17,10 +17,10 @@ public class CarRentalConsumerImpl implements CarRentalConsumer {
 
     private final CarService carService;
 
-//    @KafkaListener(
-//            topics = "update-car-rental-topic",
-//            containerFactory = "carRentalKafkaListenerContainerFactory",
-//            groupId = "car-rental-topic")
+    @KafkaListener(
+            topics = "update-car-rental-topic",
+            containerFactory = "carRentalKafkaListenerContainerFactory",
+            groupId = "car-rental-topic")
     @Override
     public void receiveMessageFromCarRental(CarRentalDto carRentalDto) throws BusinessException {
         carService.updateCarStatus(carRentalDto.getCarId(), carRentalDto.getStatus());

@@ -36,6 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (isValidToken && SecurityContextHolder.getContext().getAuthentication() == null) {
                 var claims = jwtHelper.getPayloadFromToken(token);
                 AwesomeUserDetails userDetails = modelMapper.map(claims.get("user"), AwesomeUserDetails.class);
+                userDetails.setToken(token);
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()

@@ -5,10 +5,24 @@ import com.edu.miu.dto.UserDto;
 import com.edu.miu.model.BusinessException;
 import com.edu.miu.model.PaymentMethodRequest;
 
+import java.util.List;
+
 /**
  * @author gasieugru
  */
 public interface UserService {
+
+    /**
+     * Get All Managers
+     * @return list of managers
+     */
+    List<UserDto> getAllManagers();
+
+    /**
+     * Get All Customers
+     * @return list of Customers
+     */
+    List<UserDto> getAllCustomers();
 
     /**
      * Get User By Email
@@ -17,6 +31,16 @@ public interface UserService {
      * @throws BusinessException
      */
     UserDto getUserByEmail(String email) throws BusinessException;
+
+    /**
+     * Get User By Id
+     *
+     * @param id
+     * @return UserDto
+     * @throws BusinessException
+     */
+    UserDto getUserById(int id) throws BusinessException;
+
 
     /**
      * Create a new user

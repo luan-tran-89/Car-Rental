@@ -1,22 +1,28 @@
 package com.edu.miu.service.impl;
 
-import com.edu.miu.domain.Car;
 import com.edu.miu.domain.Rental;
 import com.edu.miu.domain.User;
+import com.edu.miu.dto.CarDto;
+import com.edu.miu.dto.CarRentalDto;
+import com.edu.miu.dto.RentalDto;
+import com.edu.miu.dto.UserDto;
 import com.edu.miu.enums.CarStatus;
 import com.edu.miu.enums.UserRole;
+import com.edu.miu.enums.UserStatus;
 import com.edu.miu.feign.CarFleetClient;
 import com.edu.miu.feign.UserClient;
+import com.edu.miu.publisher.CarRentalPublisher;
 import com.edu.miu.repository.RentalRepository;
-import com.edu.miu.service.KafkaProducerService;
 import com.edu.miu.service.RentalService;
 import feign.FeignException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RentalServiceImpl implements RentalService {
@@ -25,7 +31,7 @@ public class RentalServiceImpl implements RentalService {
     private RentalRepository rentalRepository;
 
     @Autowired
-    private KafkaProducerService kafkaProducerService;
+    private CarRentalPublisher carRentalPublisher;
 
     @Autowired
     private CarFleetClient carFleetClient;
@@ -33,9 +39,23 @@ public class RentalServiceImpl implements RentalService {
     @Autowired
     private UserClient userClient;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
+    private List<RentalDto> convertFromRental(List<Rental> rentals) {
+        return rentals.stream()
+                .map(r -> modelMapper.map(r, RentalDto.class))
+                .collect(Collectors.toList());
+    }
+
     @Override
-    public List<Rental> findAllRentals() {
-        return rentalRepository.findAll();
+    public List<RentalDto> findAllRentals() {
+        return this.convertFromRental(rentalRepository.findAll());
+    }
+
+    @Override
+    public List<RentalDto> getRentalsByCarId(Integer carId) {
+        return this.convertFromRental(rentalRepository.findByCarId(carId));
     }
 
     @Override
@@ -43,16 +63,22 @@ public class RentalServiceImpl implements RentalService {
         return rentalRepository.findById(id);
     }
 
+
+    private boolean validateInformation(CarDto car, UserDto user) {
+        return car == null || car.getStatus() != CarStatus.AVAILABLE ||
+                user == null || user.getUserRole() != UserRole.CUSTOMER ||
+                user.getStatus() != UserStatus.ACTIVE;
+    }
+
     @Override
     public Rental reserveCar(Integer carId, Integer userId, Date startDate, Date endDate) {
         try {
-            Car car = carFleetClient.getCarById(carId);
-            User user = userClient.getUserById(userId);
+            CarDto car = carFleetClient.getCarById(carId);
+            UserDto user = userClient.getUserById(userId);
 
-            car.setStatus(CarStatus.RESERVED);
-
-            String message = "{\"carId\":" + car.getCarId() + ", \"status\":\"RESERVED\"}";
-            kafkaProducerService.sendMessage("carStatusTopic", message);
+            if (this.validateInformation(car, user)) {
+                throw new RuntimeException("Error reserving car or fetching user details.");
+            }
 
             Rental rental = new Rental();
             rental.setCarId(carId);
@@ -60,8 +86,11 @@ public class RentalServiceImpl implements RentalService {
             rental.setStartDate(startDate);
             rental.setEndDate(endDate);
             rental.setTotalCost(0.0); // Initialize with 0 or fetch from the existing value if it's already set.
+            rentalRepository.save(rental);
 
-            return rentalRepository.save(rental);
+            carRentalPublisher.sendUpdatedCarMessage(new CarRentalDto(car.getCarId(), CarStatus.RESERVED));
+
+            return rental;
 
         } catch (FeignException e) {
             throw new RuntimeException("Error reserving car or fetching user details.", e);
@@ -71,12 +100,16 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public Rental createRental(Rental rental) {
         try {
-            Car car = carFleetClient.getCarById(rental.getCarId());
-            User user = userClient.getUserById(rental.getUserId());
+            CarDto car = carFleetClient.getCarById(rental.getCarId());
+            UserDto user = userClient.getUserById(rental.getUserId());
+
+            if (this.validateInformation(car, user)) {
+                throw new RuntimeException("Error reserving car or fetching user details.");
+            }
 
             double totalCost = car.getFixedCost() + car.getCostPerDay() * daysBetween(rental.getStartDate(), rental.getEndDate());
 
-            if (user.getRole() == UserRole.FREQUENT_RENTER) {
+            if (user.getUserRole() == UserRole.FREQUENT_RENTER) {
                 totalCost = totalCost * (1 - user.getFrequentRenterType().getDiscount());
             }
 
@@ -98,13 +131,11 @@ public class RentalServiceImpl implements RentalService {
     public void deleteRental(Integer id) {
         Optional<Rental> rental = rentalRepository.findById(id);
         if (rental.isPresent()) {
-            Car car = carFleetClient.getCarById(rental.get().getCarId());
-            car.setStatus(CarStatus.AVAILABLE);
-
-            String message = "{\"carId\":" + car.getCarId() + ", \"status\":\"AVAILABLE\"}";
-            kafkaProducerService.sendMessage("carStatusTopic", message);
-
+            CarDto car = carFleetClient.getCarById(rental.get().getCarId());
+//            car.setStatus(CarStatus.AVAILABLE);
             rentalRepository.deleteById(id);
+
+            carRentalPublisher.sendUpdatedCarMessage(new CarRentalDto(car.getCarId(), CarStatus.AVAILABLE));
         }
     }
 
@@ -113,12 +144,10 @@ public class RentalServiceImpl implements RentalService {
         Optional<Rental> optionalRental = rentalRepository.findById(rentalId);
         if (optionalRental.isPresent()) {
             Rental rental = optionalRental.get();
-            Car car = carFleetClient.getCarById(rental.getCarId());
-            car.setStatus(CarStatus.PICKED);
+            CarDto car = carFleetClient.getCarById(rental.getCarId());
+//            car.setStatus(CarStatus.PICKED);
 
-            String message = "{\"carId\":" + car.getCarId() + ", \"status\":\"PICKED\"}";
-            kafkaProducerService.sendMessage("carStatusTopic", message);
-
+            carRentalPublisher.sendUpdatedCarMessage(new CarRentalDto(car.getCarId(), CarStatus.PICKED));
             return true;
         }
         return false;

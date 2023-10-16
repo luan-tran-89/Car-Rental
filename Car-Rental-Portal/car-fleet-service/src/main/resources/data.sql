@@ -1,4 +1,4 @@
-INSERT INTO `car-rental`.car (car_id, base_code, per_day_cost, make, model, status)
+INSERT INTO `car-rental`.car (car_id, fixed_cost, cost_per_day, make, model, status)
 VALUES (1, 60, 20, 'BMW', 'X5', 'AVAILABLE'),
        (2, 50, 20, 'HONDA', 'CR-V', 'AVAILABLE'),
        (3, 70, 25, 'BMW', 'X7', 'AVAILABLE');

@@ -7,7 +7,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
 @EnableEurekaClient
-@Tag(name = "Auth Service", description = "Business Auth Service")
 public class AuthServiceApplication {
 
     public static void main(String[] args) {

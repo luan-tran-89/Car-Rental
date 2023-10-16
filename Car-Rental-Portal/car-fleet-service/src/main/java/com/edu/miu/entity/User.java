@@ -14,7 +14,6 @@ import javax.persistence.*;
  * @author gasieugru
  */
 @Entity
-@Table(name = "users")
 @Data
 @Builder
 @NoArgsConstructor
@@ -23,7 +22,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int userId;
 
     @Column(name = "user_name")
     private String userName;

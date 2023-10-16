@@ -1,5 +1,6 @@
 package com.edu.miu.controller;
 
+import com.edu.miu.dto.RentalDto;
 import com.edu.miu.service.RentalService;
 import com.edu.miu.domain.Rental;
 import com.edu.miu.dto.ReservationDTO;
@@ -30,8 +31,14 @@ public class RentalController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Rental>> getAllRentals() {
-        List<Rental> rentals = rentalService.findAllRentals();
+    public ResponseEntity<List<RentalDto>> getAllRentals() {
+        List<RentalDto> rentals = rentalService.findAllRentals();
+        return new ResponseEntity<>(rentals, HttpStatus.OK);
+    }
+
+    @GetMapping("/car/{carId}")
+    public ResponseEntity<List<RentalDto>> getRentalsByUser(@PathVariable("carId") Integer carId) {
+        List<RentalDto> rentals = rentalService.getRentalsByCarId(carId);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
