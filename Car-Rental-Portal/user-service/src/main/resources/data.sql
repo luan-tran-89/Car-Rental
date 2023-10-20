@@ -1,4 +1,5 @@
-INSERT INTO user(user_name, email, first_name, last_name, phone, password, user_role, status, frequent_rental_type)
+
+INSERT INTO user(user_name, email, first_name, last_name, phone, password, user_role, status, frequent_renter_type)
 VALUES ('admin', 'admin@miu.edu', 'admin', 'admin', '20612346482',
         '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', -- 123
         'ADMIN', 'ACTIVE', 'NONE'),
@@ -9,12 +10,8 @@ VALUES ('admin', 'admin@miu.edu', 'admin', 'admin', '20612346482',
         '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', -- 123
         'CUSTOMER', 'ACTIVE', 'NONE');
 
--- INSERT INTO role (id, role)
--- VALUES (1, 'ADMIN');
--- INSERT INTO role (id, role)
--- VALUES (2, 'MANAGER');
--- INSERT INTO role (id, role)
--- VALUES (3, 'CUSTOMER');
 
--- INSERT INTO users_roles (user_id, roles_id)
--- VALUES (1, 1);
+INSERT INTO `car-rental`.card (card_type, card_id, card_holder_name, card_number, cvv, expiration_date, user_id)
+VALUES ('VISA', 1, 'Adam', '1234567890', '123', '10/2025', 3),
+       ('MASTER_CARD', 2, 'Adam', '4567123890', '234', '08/2026', 3);
+

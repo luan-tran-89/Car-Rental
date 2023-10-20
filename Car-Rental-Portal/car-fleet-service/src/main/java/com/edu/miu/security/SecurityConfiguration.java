@@ -47,6 +47,7 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers(this.getPrefixPaths(SWAGGER_PATH, null)).permitAll()
                 .antMatchers(HttpMethod.GET,"/car-fleet/**").permitAll()
+                .antMatchers("/aws/**").hasAnyRole("ADMIN", "MANAGER")
 //                .antMatchers(HttpMethod.GET,"/car-fleet/maintenance-history", "/car-fleet/car-rental-report", "/car-fleet/export-car-rental-report")
 //                    .hasAnyRole("ADMIN", "MANAGER")
 //                .antMatchers(HttpMethod.PUT,"/car-fleet/maintenance/**")

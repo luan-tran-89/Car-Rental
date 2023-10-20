@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/uaa")
 @RequiredArgsConstructor
 @Tag(name = "Auth Service", description = "Business Auth Service")
-@OpenAPIDefinition(servers = { @Server(url = "Auth-service")},
+@OpenAPIDefinition(servers = { @Server(url = "/auth-service")},
         info = @Info(title = "Car Rental System - Auth Service", version = "v1",
                 description = "This is a documentation for the Auth Service",
                 license = @License(name = "Apache 2.0", url = "http://car-fleet-license.com"),

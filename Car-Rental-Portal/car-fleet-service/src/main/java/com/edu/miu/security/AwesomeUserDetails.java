@@ -24,6 +24,8 @@ import java.util.Locale;
 @AllArgsConstructor
 public class AwesomeUserDetails implements UserDetails {
 
+    private Integer userId;
+
     private String email;
 
     private UserStatus status;
@@ -35,6 +37,7 @@ public class AwesomeUserDetails implements UserDetails {
     private String token;
 
     public AwesomeUserDetails(User user) {
+        this.userId = user.getUserId();
         this.email = user.getEmail();
         this.status = user.getStatus();
         this.frequentRenterType = user.getFrequentRenterType();

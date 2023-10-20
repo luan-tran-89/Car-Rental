@@ -1,5 +1,6 @@
 package com.edu.miu.service;
 
+import com.edu.miu.client.RentalClient;
 import com.edu.miu.dto.RegisterUserDto;
 import com.edu.miu.dto.UserDto;
 import com.edu.miu.entity.User;
@@ -25,6 +26,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.verification.VerificationMode;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
@@ -45,7 +47,13 @@ public class UserServiceTest {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Mock
+    private RentalClient rentalClient;
+
+    @Mock
     private UserMapper userMapper =  new UserMapper();
+
+    @Mock
+    private ModelMapper modelMapper;
 
     private User user;
 
@@ -53,7 +61,8 @@ public class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserServiceImpl(userRepository, new UserMapper(), bCryptPasswordEncoder);
+        userService = new UserServiceImpl(userRepository, rentalClient,
+                new UserMapper(), modelMapper, bCryptPasswordEncoder);
 
         user = User.builder()
                 .userName("Testing")

@@ -13,6 +13,7 @@ import com.edu.miu.model.BusinessException;
 import com.edu.miu.model.CarFilter;
 import com.edu.miu.repo.CarRepository;
 import com.edu.miu.repo.MaintenanceRepository;
+import com.edu.miu.service.AwsClient;
 import com.edu.miu.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -20,9 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author gasieugru
@@ -36,7 +37,7 @@ public class CarServiceImpl implements CarService {
 
     private final CarDao carDao;
 
-    private final MaintenanceRepository maintenanceRepository;
+    private final AwsClient awsClient;
 
     private final CarMapper carMapper;
 
@@ -56,6 +57,22 @@ public class CarServiceImpl implements CarService {
     public CarDto addCar(CarDto carDto) {
         Car car = carMapper.toEntity(carDto);
         carRepository.save(car);
+        return carMapper.toDto(car);
+    }
+
+    @Override
+    @Transactional
+    public CarDto addCarWithImg(CarDto carDto, MultipartFile image) {
+        Car car = carMapper.toEntity(carDto);
+        carRepository.save(car);
+
+        if (image != null) {
+            String path = String.format("car_%s", car.getCarId());
+            String url = awsClient.uploadFile(image, path);
+            car.setImage(url);
+            carRepository.save(car);
+        }
+
         return carMapper.toDto(car);
     }
 
