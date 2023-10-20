@@ -17,9 +17,11 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ import java.util.List;
 @RequestMapping("/car-fleet")
 @RequiredArgsConstructor
 @Tag(name = "Car Fleet Service", description = "Business Car Fleet Service")
-@OpenAPIDefinition(servers = { @Server(url = "Car-Fleet-service")},
+@OpenAPIDefinition(servers = { @Server(url = "/car-Fleet-service")},
         info = @Info(title = "Car Rental System - Car Fleet Service", version = "v1",
                 description = "This is a documentation for the Car Fleet Service",
                 license = @License(name = "Apache 2.0", url = "http://car-fleet-license.com"),
@@ -62,6 +64,11 @@ public class CarFleetController {
     @PostMapping
     public ResponseEntity addCar(@RequestBody CarDto carDto) {
         return ResponseEntity.ok().body(carService.addCar(carDto));
+    }
+
+    @PostMapping(value = "/add", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity addCarWithImg(@RequestParam(value = "car") CarDto carDto, @RequestParam(value = "img") MultipartFile img) {
+        return ResponseEntity.ok().body(carService.addCarWithImg(carDto, img));
     }
 
     @DeleteMapping("/{id}")

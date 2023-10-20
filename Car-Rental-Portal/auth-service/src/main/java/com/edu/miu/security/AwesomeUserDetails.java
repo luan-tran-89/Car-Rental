@@ -5,7 +5,9 @@ import com.edu.miu.enums.FrequentRenterType;
 import com.edu.miu.enums.Role;
 import com.edu.miu.enums.UserStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,9 +20,14 @@ import java.util.Locale;
  * @author gasieugru
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AwesomeUserDetails implements UserDetails {
 
+    private Integer userId;
+
     private String userName;
+
     private String email;
 
     @JsonIgnore
@@ -33,6 +40,7 @@ public class AwesomeUserDetails implements UserDetails {
     private Role role;
 
     public AwesomeUserDetails(User user) {
+        this.userId = user.getUserId();
         this.userName = user.getUserName();
         this.email = user.getEmail();
         this.password = user.getPassword();

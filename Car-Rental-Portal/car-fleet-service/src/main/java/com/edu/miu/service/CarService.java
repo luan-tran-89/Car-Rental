@@ -5,6 +5,7 @@ import com.edu.miu.dto.MaintenanceDto;
 import com.edu.miu.enums.CarStatus;
 import com.edu.miu.model.BusinessException;
 import com.edu.miu.model.CarFilter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,6 +28,14 @@ public interface CarService {
      * @return CarDto
      */
     CarDto addCar(CarDto car);
+
+    /**
+     * Add a new car with image
+     * @param car
+     * @param image
+     * @return CarDto
+     */
+    CarDto addCarWithImg(CarDto car, MultipartFile image);
 
     /**
      * Remove a car

@@ -1,9 +1,7 @@
 package com.edu.miu.controller;
 
 import com.edu.miu.client.AuthClient;
-import com.edu.miu.dto.ErrorResponse;
-import com.edu.miu.dto.RegisterUserDto;
-import com.edu.miu.dto.UserDto;
+import com.edu.miu.dto.*;
 import com.edu.miu.enums.Role;
 import com.edu.miu.model.BusinessException;
 import com.edu.miu.model.LoginRequest;
@@ -35,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Tag(name = "User Service", description = "Business User Service")
-@OpenAPIDefinition(servers = { @Server(url = "User-service")},
+@OpenAPIDefinition(servers = { @Server(url = "/user-service")},
         info = @Info(title = "Car Rental System - User Service", version = "v1",
                 description = "This is a documentation for the User Service",
                 license = @License(name = "Apache 2.0", url = "http://car-fleet-license.com"),
@@ -59,6 +57,7 @@ public class UserController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity getAllCustomers() {
         return ResponseEntity.ok(userService.getAllCustomers());
     }
@@ -125,9 +124,16 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CUSTOMER', 'FREQUENT_RENTER')")
     public ResponseEntity getUserById(@PathVariable(name = "userId") int userId) {
-
         try {
+            boolean isInvalidUser = authHelper.getRole() == Role.CUSTOMER && userId != authHelper.getUserId();
+
+            if (isInvalidUser) {
+                return ResponseEntity.ok()
+                        .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name()));
+            }
+
             return ResponseEntity.ok().body(userService.getUserById(userId));
         } catch (BusinessException e) {
             LOGGER.warn(e.getMessage());
@@ -137,6 +143,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CUSTOMER', 'FREQUENT_RENTER')")
     public ResponseEntity getUser(@RequestParam(name = "email", defaultValue = "") String email) {
         try {
             boolean isNotSameEmail = !email.equals(authHelper.getEmail());
@@ -163,23 +170,64 @@ public class UserController {
     }
 
     @GetMapping("/reservations")
-    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CUSTOMER', 'FREQUENT_RENTER')")
     public ResponseEntity getCurrentReservations(@RequestParam(name = "email", defaultValue = "") String email) {
+        boolean isInvalidUser = authHelper.getRole() == Role.CUSTOMER && !email.equals(authHelper.getEmail());
+
+        if (isInvalidUser) {
+            return ResponseEntity.ok()
+                    .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name()));
+        }
+
         var reservations = carRentalService.getCurrentReservations(email);
         return ResponseEntity.ok().body(reservations);
     }
 
     @GetMapping("/rental-history")
-    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'FREQUENT_RENTER')")
     public ResponseEntity getRentalHistory() {
         var rentals = carRentalService.getRentalHistory(authHelper.getEmail());
         return ResponseEntity.ok().body(rentals);
     }
 
-    @PutMapping("/addPayment/{email}")
-    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'ROLE_FREQUENT_CUSTOMER')")
-    public ResponseEntity addPayment(@PathVariable("email") String email, @RequestBody PaymentMethodRequest paymentMethodRequest) {
-        return ResponseEntity.ok("");
+    @PostMapping("/addCard")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'FREQUENT_RENTER')")
+    public ResponseEntity addCard(@RequestBody CardDto cardDto) {
+        try {
+            userService.addCard(authHelper.getUserId(), cardDto);
+            return ResponseEntity.ok().body(new MessageResponse("Add card successfully."));
+        } catch (BusinessException e) {
+            LOGGER.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+
+    @PutMapping("/updateCard/{cardId}")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'FREQUENT_RENTER')")
+    public ResponseEntity updateCard(@PathVariable(value = "cardId") Integer cardId, @RequestBody CardDto cardDto) {
+        try {
+            cardDto.setCardId(cardId);
+            userService.updateCard(authHelper.getUserId(), cardDto);
+            return ResponseEntity.ok().body(new MessageResponse("Update card successfully."));
+        } catch (BusinessException e) {
+            LOGGER.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/deleteCard/{cardId}")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'FREQUENT_RENTER')")
+    public ResponseEntity deleteCard(@PathVariable(value = "cardId") Integer cardId) {
+        try {
+            userService.deleteCard(authHelper.getUserId(), cardId);
+            return ResponseEntity.ok().body(new MessageResponse("Delete card successfully."));
+        } catch (BusinessException e) {
+            LOGGER.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
     }
 
 }

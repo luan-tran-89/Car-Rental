@@ -1,0 +1,116 @@
+version: "3.7"
+services:
+  #
+  # DATABASES
+  #
+  car-rental-db:
+    image: mysql:8.0
+    container_name: mysql8
+    command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_DATABASE: car-rental
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    networks:
+      - db-network
+
+  #
+  # MICROSERVICES
+  #
+  service-discovery:
+    image: pmcoursemiu/service-discovery:0.0.1
+    ports:
+      - "8888:8888"
+    depends_on:
+      - zipkin
+    networks:
+      - microservice-network
+
+  api-gateway:
+    image: pmcoursemiu/api-gateway:0.0.1
+    ports:
+      - "8889:8889"
+    environment:
+      - spring.zipkin.base-url=http://zipkin:9411
+      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
+    depends_on:
+      - service-discovery
+    networks:
+      - microservice-network
+
+  auth-service:
+    image: pmcoursemiu/auth-service:0.0.1
+    container_name: auth-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
+      - spring.zipkin.base-url=http://zipkin:9411
+      - spring.datasource.url=jdbc:mysql://car-rental-db:3306/car-rental
+    depends_on:
+      - service-discovery
+      - car-rental-db
+    networks:
+      - microservice-network
+      - db-network
+    restart: unless-stopped
+
+  user-service:
+    image: pmcoursemiu/user-service:0.0.1
+    container_name: user-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
+      - spring.zipkin.base-url=http://zipkin:9411
+      - spring.datasource.url=jdbc:mysql://car-rental-db:3306/car-rental
+    depends_on:
+      - service-discovery
+      - car-rental-db
+    networks:
+      - microservice-network
+      - db-network
+    restart: unless-stopped
+
+  #
+  # ZIPKIN
+  #
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+
+  #
+  # MESSAGING
+  #
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    ports:
+      - "2181:2181"
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: yes
+    networks:
+      - microservice-network
+
+  kafka:
+    image: bitnami/kafka:latest
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_LISTENERS: PLAINTEXT://:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: yes
+    restart: unless-stopped
+    networks:
+      - microservice-network
+
+#
+# NETWORKS
+#
+networks:
+  db-network:
+  zipkin-network:
+  microservice-network:

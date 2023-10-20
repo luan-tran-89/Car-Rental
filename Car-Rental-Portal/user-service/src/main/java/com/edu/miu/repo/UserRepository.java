@@ -14,6 +14,13 @@ import java.util.List;
 public interface UserRepository extends CrudRepository<User, Integer> {
 
     /**
+     * Find user by userId
+     * @param userId
+     * @return User
+     */
+    User findByUserId(Integer userId);
+
+    /**
      * Find user by email
      * @param email
      * @return User

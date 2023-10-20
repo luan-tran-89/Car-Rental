@@ -1,0 +1,5 @@
+amazonProperties:
+  endpointUrl: https://s3.amazonaws.com
+  accessKey: <enter_accessKey>
+  secretKey: <enter_secretKey>
+  bucketName: <enter_bucket_name>

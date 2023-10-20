@@ -1,5 +1,6 @@
 package com.edu.miu.service;
 
+import com.edu.miu.dto.CardDto;
 import com.edu.miu.dto.RegisterUserDto;
 import com.edu.miu.dto.UserDto;
 import com.edu.miu.model.BusinessException;
@@ -66,11 +67,27 @@ public interface UserService {
     boolean disableCustomer(String email) throws BusinessException;
 
     /**
-     * Add Payment Method
-     * @param email
-     * @param paymentMethodRequest
+     * Add Card Method
+     * @param userId
+     * @param cardDto
      * @throws BusinessException
      */
-    void addPaymentMethod(String email, PaymentMethodRequest paymentMethodRequest) throws BusinessException;
+    void addCard(Integer userId, CardDto cardDto) throws BusinessException;
 
+    /**
+     * Update Card
+     * @param userId
+     * @param cardDto
+     * @throws BusinessException
+     */
+    void updateCard(Integer userId, CardDto cardDto) throws BusinessException;
+
+    /**
+     * Remove Card
+     *
+     * @param userId
+     * @param cardId
+     * @throws BusinessException
+     */
+    void deleteCard(Integer userId, Integer cardId) throws BusinessException;
 }
