@@ -8,18 +8,31 @@ import java.util.List;
 public interface CarRentalService {
 
     /**
+     * Check if User is currently renting
+     * @param userId
+     * @return true if user is currently renting, otherwise false
+     */
+    boolean isUserCurrentlyRenting(Integer userId);
+
+    /**
      * Get Current Reservations
      *
-     * @param email
+     * @param userId
      * @return list of reservations
      */
-    List<Object> getCurrentReservations(String email);
+    List<Object> getCurrentReservations(int userId);
+
+    /**
+     * Get All Rental History
+     * @return list of rental history for user
+     */
+    List<Object> getAllRentalHistory();
 
     /**
      * Get Rental History for user
-     * @param email
+     * @param userId
      * @return list of rental history for user
      */
-    List<Object> getRentalHistory(String email);
+    List<Object> getRentalHistory(int userId);
 
 }

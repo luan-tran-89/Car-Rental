@@ -51,6 +51,21 @@ public interface UserService {
     UserDto createUser(RegisterUserDto userDto) throws BusinessException;
 
     /**
+     * Update a user
+     * @param userDto
+     * @return UserDto
+     */
+    UserDto updateUser(UserDto userDto) throws BusinessException;
+
+    /**
+     * Update full information for a user
+     * @param userId
+     * @param userDto
+     * @return UserDto
+     */
+    UserDto updateFullUser(int userId, UserDto userDto) throws BusinessException;
+
+    /**
      * Disable Manager
      * @param email
      * @return true if successful otherwise false

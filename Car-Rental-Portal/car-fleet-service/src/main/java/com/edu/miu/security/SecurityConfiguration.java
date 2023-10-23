@@ -46,6 +46,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(this.getPrefixPaths(SWAGGER_PATH, null)).permitAll()
+                .antMatchers("/actuator/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/car-fleet/**").permitAll()
                 .antMatchers("/aws/**").hasAnyRole("ADMIN", "MANAGER")
 //                .antMatchers(HttpMethod.GET,"/car-fleet/maintenance-history", "/car-fleet/car-rental-report", "/car-fleet/export-car-rental-report")

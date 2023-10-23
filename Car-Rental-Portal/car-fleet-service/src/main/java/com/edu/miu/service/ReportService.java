@@ -1,6 +1,9 @@
 package com.edu.miu.service;
 
 import com.edu.miu.enums.ReportFormat;
+import com.edu.miu.enums.TimeReport;
+
+import java.util.List;
 
 /**
  * @author gasieugru
@@ -14,6 +17,10 @@ public interface ReportService {
      * @param format
      * @return
      */
-    byte[] getRentalReportToCar(int carId, ReportFormat format);
+    byte[] getCarReport(int carId, ReportFormat format);
 
+
+    List<Object> getCarRentalReport(TimeReport timeReport);
+
+    byte[] exportCarRentalReport(TimeReport timeReport, ReportFormat format);
 }

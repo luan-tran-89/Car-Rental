@@ -96,4 +96,21 @@ public interface CarService {
      */
     void updateCarStatus(int carId, CarStatus status) throws BusinessException;
 
+    /**
+     * Get all rental history
+     * @return list of rental history
+     */
+    List<Object> getAllRentalHistory();
+
+    /**
+     * Get all rental history by userId
+     * @return list of rental history
+     */
+    List<Object> getRentalHistoryByUserId(int userId);
+
+    /**
+     * Get all rental history by carId
+     * @return list of rental history
+     */
+    List<Object> getRentalHistoryByCarId(int carId);
 }

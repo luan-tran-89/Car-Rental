@@ -1,7 +1,10 @@
 package com.edu.miu.entity;
 
 import com.edu.miu.enums.CarStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
@@ -13,6 +16,9 @@ import java.util.List;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Car {
 
     @Id

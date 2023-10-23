@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * @author gasieugru
  */
-public interface AwsClient {
+public interface AwsService {
 
     String uploadFile(MultipartFile file, String path);
 

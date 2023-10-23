@@ -54,6 +54,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeRequests()
+                .antMatchers("/actuator/**").permitAll()
                 .antMatchers("/uaa").permitAll()
                 .antMatchers("/uaa/**").permitAll()
                 .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/webjars/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/swagger-ui/**").permitAll()

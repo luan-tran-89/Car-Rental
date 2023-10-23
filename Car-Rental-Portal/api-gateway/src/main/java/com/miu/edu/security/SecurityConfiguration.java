@@ -19,6 +19,7 @@ public class SecurityConfiguration {
                 .authorizeExchange()
                 //ALLOWING REGISTER API FOR DIRECT ACCESS
                 .pathMatchers("/swagger-ui.html", "/webjars/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
+                .pathMatchers("/actuator/**").permitAll()
                 .pathMatchers("/**").permitAll()
                 //ALL OTHER APIS ARE AUTHENTICATED
                 .anyExchange().authenticated()

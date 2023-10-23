@@ -3,7 +3,9 @@ package com.edu.miu.dto;
 import com.edu.miu.enums.FrequentRenterType;
 import com.edu.miu.enums.Role;
 import com.edu.miu.enums.UserStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +15,7 @@ import java.util.List;
  * @author gasieugru
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
@@ -28,6 +31,9 @@ public class UserDto {
     private String lastName;
 
     private String phone;
+
+    @JsonIgnore
+    private String password;
 
     private Role userRole;
 

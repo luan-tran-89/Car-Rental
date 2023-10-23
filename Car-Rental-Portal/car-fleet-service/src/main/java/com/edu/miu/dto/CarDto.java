@@ -2,6 +2,7 @@ package com.edu.miu.dto;
 
 import com.edu.miu.enums.CarStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,8 +10,9 @@ import lombok.NoArgsConstructor;
  * @author gasieugru
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CarDto {
 
     private Integer carId;

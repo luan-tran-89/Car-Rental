@@ -3,10 +3,13 @@ package com.edu.miu.controller;
 import com.edu.miu.dto.CarDto;
 import com.edu.miu.dto.ErrorResponse;
 import com.edu.miu.dto.MaintenanceDto;
+import com.edu.miu.enums.ReportFormat;
+import com.edu.miu.enums.TimeReport;
 import com.edu.miu.model.BusinessException;
 import com.edu.miu.model.CarFilter;
 import com.edu.miu.security.AuthHelper;
 import com.edu.miu.service.CarService;
+import com.edu.miu.service.ReportService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -43,7 +46,7 @@ public class CarFleetController {
 
     private final CarService carService;
 
-    private final AuthHelper authHelper;
+    private final ReportService reportService;
 
     @GetMapping("/car/{id}")
     public ResponseEntity getCarById(@PathVariable("id") int id) {
@@ -135,30 +138,38 @@ public class CarFleetController {
         }
     }
 
-    @GetMapping("/rental-history/{userId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CUSTOMER')")
-    public ResponseEntity getRentalHistory(@PathVariable("userId") int userId) {
-//        var rentals = carRentalService.getRentalHistory(authHelper.getEmail());
-        return ResponseEntity.ok().body(null);
+    @GetMapping("/rental-history/user/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity getRentalHistoryByUserId(@PathVariable("userId") int userId) {
+        var rentals = carService.getRentalHistoryByUserId(userId);
+        return ResponseEntity.ok().body(rentals);
     }
 
-    @GetMapping("/rental-history")
+    @GetMapping("/rental-history/{carId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity getRentalHistoryByCarId(@PathVariable("carId") int carId) {
+        var rentals = carService.getRentalHistoryByCarId(carId);
+        return ResponseEntity.ok().body(rentals);
+    }
+
+    @GetMapping("/rental-history/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity getAllRentalHistory() {
-//        var rentals = carRentalService.getRentalHistory(authHelper.getEmail());
-        return ResponseEntity.ok().body(null);
+        var rentals = carService.getAllRentalHistory();
+        return ResponseEntity.ok().body(rentals);
     }
 
     @GetMapping("/car-rental-report")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseEntity getCarRentalReport() {
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity getCarRentalReport(@RequestParam(value = "timeReport", defaultValue = "MONTHLY") TimeReport timeReport) {
+        return ResponseEntity.ok().body(reportService.getCarRentalReport(timeReport));
     }
 
     @GetMapping("/export-car-rental-report")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseEntity exportCarRentalReport() {
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity exportCarRentalReport(@RequestParam(value = "timeReport", defaultValue = "MONTHLY") TimeReport timeReport,
+                                                @RequestParam(value = "format", defaultValue = "PDF") ReportFormat format) {
+        return ResponseEntity.ok().body(reportService.exportCarRentalReport(timeReport, format));
     }
 
 }

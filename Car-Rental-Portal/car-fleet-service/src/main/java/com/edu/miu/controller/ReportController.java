@@ -23,7 +23,7 @@ public class ReportController {
 
     @GetMapping("/car-reports/{carId}")
     public ResponseEntity getReport(@PathVariable("carId") int carId, @RequestParam(value = "format", defaultValue = "PDF") ReportFormat format) {
-        byte[] reportContent = reportService.getRentalReportToCar(carId, format);
+        byte[] reportContent = reportService.getCarReport(carId, format);
 
         ByteArrayResource resource = new ByteArrayResource(reportContent);
         return ResponseEntity.ok()

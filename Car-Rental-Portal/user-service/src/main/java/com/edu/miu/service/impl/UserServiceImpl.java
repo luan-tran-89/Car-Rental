@@ -14,8 +14,10 @@ import com.edu.miu.enums.UserStatus;
 import com.edu.miu.mapper.UserMapper;
 import com.edu.miu.model.BusinessException;
 import com.edu.miu.repo.UserRepository;
+import com.edu.miu.security.AuthHelper;
 import com.edu.miu.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,6 +44,8 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final AuthHelper authHelper;
 
     private User findById(int userId) throws BusinessException {
         return Optional.ofNullable(userRepository.findByUserId(userId))
@@ -72,8 +76,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(int id) throws BusinessException {
-        var user = userRepository.findById(id);
-        return userMapper.toDto(user.orElseThrow(() -> new BusinessException(String.format("User %s not found", id))));
+        var user = this.findById(id);
+        return userMapper.toDto(Optional.ofNullable(user).orElseThrow(() -> new BusinessException(String.format("User %s not found", id))));
     }
 
     @Override
@@ -88,11 +92,90 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    private void updateUser(User user, UserDto userDto) {
+        if (StringUtils.isNotBlank(userDto.getUserName()) && !userDto.getUserName().equals(user.getUserName())) {
+            user.setUserName(userDto.getUserName());
+        }
+
+        if (StringUtils.isNotBlank(userDto.getEmail()) && !userDto.getEmail().equals(user.getEmail())) {
+            user.setEmail(userDto.getEmail());
+        }
+
+        if (StringUtils.isNotBlank(userDto.getFirstName()) && !userDto.getFirstName().equals(user.getFirstName())) {
+            user.setFirstName(userDto.getFirstName());
+        }
+
+        if (StringUtils.isNotBlank(userDto.getLastName()) && !userDto.getLastName().equals(user.getLastName())) {
+            user.setLastName(userDto.getLastName());
+        }
+
+        if (StringUtils.isNotBlank(userDto.getPhone()) && !userDto.getPhone().equals(user.getPhone())) {
+            user.setPhone(userDto.getPhone());
+        }
+
+        if (StringUtils.isNotBlank(userDto.getPassword()) && !userDto.getPassword().equals(user.getPassword())) {
+            user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        }
+    }
+
+    @Override
+    public UserDto updateUser(UserDto userDto) throws BusinessException {
+        User user = this.findById(authHelper.getUserId());
+
+        this.updateUser(user, userDto);
+
+        return userMapper.toDto(userRepository.save(user));
+    }
+
+    @Override
+    public UserDto updateFullUser(int userId, UserDto userDto) throws BusinessException {
+        User user = this.findById(userId);
+
+        Role authRole = authHelper.getRole();
+        Role newRole = userDto.getUserRole();
+
+        boolean isValidPermission = false;
+
+        if (!Role.isAdmin(newRole)) {
+            if (Role.isAdmin(authRole)) {
+                isValidPermission = true;
+            } else if (Role.isManager(user.getUserRole())) {
+                if ((newRole == null || Role.isManager(newRole)) && user.getUserId() == authHelper.getUserId()) {
+                    isValidPermission = true;
+                }
+            } else if (!Role.isAdmin(user.getUserRole())) {
+                if (Role.isManager(authRole) && (newRole == null || !Role.isManager(newRole))) {
+                    isValidPermission = true;
+                }
+            }
+        }
+
+        if (!isValidPermission) {
+            throw new BusinessException(String.format("You don't have permission to update the user %s.", userId));
+        }
+
+        this.updateUser(user, userDto);
+
+        if (userDto.getUserRole() != null && userDto.getUserRole() != user.getUserRole()) {
+            user.setUserRole(userDto.getUserRole());
+        }
+
+        if (userDto.getStatus() != null && userDto.getStatus() != user.getStatus()) {
+            user.setStatus(userDto.getStatus());
+        }
+
+        if (userDto.getFrequentRenterType() != null && userDto.getFrequentRenterType() != user.getFrequentRenterType()) {
+            user.setFrequentRenterType(userDto.getFrequentRenterType());
+        }
+
+        return userMapper.toDto(userRepository.save(user));
+    }
+
     @Override
     public boolean disableManager(String email) throws BusinessException {
         User user = this.findByEmail(email);
 
-        if (user.getUserRole() != Role.MANAGER) {
+        if (!Role.isManager(user.getUserRole())) {
             throw new BusinessException(String.format("You can't disable user %s with role %s", user.getEmail(), user.getUserRole()));
         }
         user.setStatus(UserStatus.DISABLE);
@@ -103,7 +186,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean disableCustomer(String email) throws BusinessException {
         User user = this.findByEmail(email);
-        if (user.getUserRole() != Role.CUSTOMER) {
+        if (!Role.isCustomer(user.getUserRole())) {
             throw new BusinessException(String.format("You can't disable user %s with role %s", user.getEmail(), user.getUserRole()));
         }
 

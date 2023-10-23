@@ -1,6 +1,7 @@
 package com.edu.miu.mapper;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,7 +10,9 @@ import java.util.stream.Collectors;
  * @author gasieugru
  */
 public class Mapper<K,V> {
-    protected ModelMapper modelMapper = new ModelMapper();
+
+    @Autowired
+    protected ModelMapper modelMapper;
     Class<K> entityClass;
     Class<V> dtoClass;
     public Mapper(Class<K> t, Class<V> u){

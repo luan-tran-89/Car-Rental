@@ -1,5 +1,6 @@
 package com.edu.miu.service.impl;
 
+import com.edu.miu.client.RentalClient;
 import com.edu.miu.dao.CarDao;
 import com.edu.miu.dto.CarDto;
 import com.edu.miu.dto.MaintenanceDto;
@@ -12,13 +13,14 @@ import com.edu.miu.mapper.MaintenanceMapper;
 import com.edu.miu.model.BusinessException;
 import com.edu.miu.model.CarFilter;
 import com.edu.miu.repo.CarRepository;
-import com.edu.miu.repo.MaintenanceRepository;
-import com.edu.miu.service.AwsClient;
+import com.edu.miu.service.AwsService;
 import com.edu.miu.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,11 +39,15 @@ public class CarServiceImpl implements CarService {
 
     private final CarDao carDao;
 
-    private final AwsClient awsClient;
+    private final AwsService awsService;
+
+    private final RentalClient rentalClient;
 
     private final CarMapper carMapper;
 
     private final MaintenanceMapper maintenanceMapper;
+
+    private final CircuitBreakerFactory breakerFactory;
 
     private Car findById(int carId) throws BusinessException {
         return carRepository.findById(carId)
@@ -68,7 +74,7 @@ public class CarServiceImpl implements CarService {
 
         if (image != null) {
             String path = String.format("car_%s", car.getCarId());
-            String url = awsClient.uploadFile(image, path);
+            String url = awsService.uploadFile(image, path);
             car.setImage(url);
             carRepository.save(car);
         }
@@ -85,6 +91,7 @@ public class CarServiceImpl implements CarService {
         }
 
         car.setStatus(CarStatus.DISABLED);
+        carRepository.save(car);
         return true;
     }
 
@@ -173,10 +180,6 @@ public class CarServiceImpl implements CarService {
         return carMapper.toDto(car);
     }
 
-    private void update(Car car) {
-        car.setStatus(CarStatus.AVAILABLE);
-    }
-
 
     private void updateMaintenance(Maintenance m, MaintenanceDto dto) {
         if (dto.getStartDate() != null &&
@@ -216,5 +219,26 @@ public class CarServiceImpl implements CarService {
         var car = this.findById(carId);
         car.setStatus(status);
         carRepository.save(car);
+    }
+
+    @Override
+    public List<Object> getAllRentalHistory() {
+        CircuitBreaker circuitBreaker = breakerFactory.create("all-rentals-fetching");
+        var data = circuitBreaker.run(() -> rentalClient.getAllRentals(), throwable -> null);
+        return data;
+    }
+
+    @Override
+    public List<Object> getRentalHistoryByUserId(int userId) {
+        CircuitBreaker circuitBreaker = breakerFactory.create("user-rentals-fetching");
+        var data = circuitBreaker.run(() -> rentalClient.getRentalsByUser(userId), throwable -> null);
+        return data;
+    }
+
+    @Override
+    public List<Object> getRentalHistoryByCarId(int carId) {
+        CircuitBreaker circuitBreaker = breakerFactory.create("car-rentals-fetching");
+        var data = circuitBreaker.run(() -> rentalClient.getRentalsByCar(carId), throwable -> null);
+        return data;
     }
 }
