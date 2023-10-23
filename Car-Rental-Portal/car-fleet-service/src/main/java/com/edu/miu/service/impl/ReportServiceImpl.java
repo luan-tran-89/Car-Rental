@@ -1,7 +1,9 @@
 package com.edu.miu.service.impl;
 
+import com.edu.miu.client.RentalClient;
 import com.edu.miu.dto.CarDto;
 import com.edu.miu.enums.ReportFormat;
+import com.edu.miu.enums.TimeReport;
 import com.edu.miu.model.BusinessException;
 import com.edu.miu.model.CarFilter;
 import com.edu.miu.service.CarService;
@@ -9,6 +11,8 @@ import com.edu.miu.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
@@ -28,8 +32,12 @@ public class ReportServiceImpl implements ReportService {
 
     private final CarService carService;
 
+    private final RentalClient rentalClient;
+
+    private final CircuitBreakerFactory breakerFactory;
+
     @Override
-    public byte[] getRentalReportToCar(int carId, ReportFormat format) {
+    public byte[] getCarReport(int carId, ReportFormat format) {
         try {
             List<CarDto> cars = carService.filterCars(new CarFilter());
 
@@ -63,5 +71,33 @@ public class ReportServiceImpl implements ReportService {
             throw new RuntimeException(e);
         }
         return reportContent;
+    }
+
+    @Override
+    public List<Object> getCarRentalReport(TimeReport timeReport) {
+        CircuitBreaker circuitBreaker = breakerFactory.create("reservations-fetching");
+        var data = circuitBreaker.run(() -> rentalClient.getRentalReport(timeReport), throwable -> null);
+        return data;
+    }
+
+    @Override
+    public byte[] exportCarRentalReport(TimeReport timeReport, ReportFormat format) {
+        try {
+            var rentalReport = this.getCarRentalReport(timeReport);
+
+            File file = ResourceUtils.getFile("classpath:reports/CarRentalReport.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("title", "Car Rental Report");
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(rentalReport);
+
+            return this.generateReport(jasperReport, params, dataSource, format);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

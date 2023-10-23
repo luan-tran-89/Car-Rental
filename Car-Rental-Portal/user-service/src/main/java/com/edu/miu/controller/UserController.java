@@ -5,7 +5,6 @@ import com.edu.miu.dto.*;
 import com.edu.miu.enums.Role;
 import com.edu.miu.model.BusinessException;
 import com.edu.miu.model.LoginRequest;
-import com.edu.miu.model.PaymentMethodRequest;
 import com.edu.miu.model.RefreshTokenRequest;
 import com.edu.miu.security.AuthHelper;
 import com.edu.miu.service.CarRentalService;
@@ -63,12 +62,13 @@ public class UserController {
     }
 
     @GetMapping("/manager/list")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity getAllManagers() {
         return ResponseEntity.ok(userService.getAllManagers());
     }
 
     @PostMapping("/manager/add")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity createManager(@RequestBody RegisterUserDto userDto) {
         try {
             userDto.setUserRole(Role.MANAGER);
@@ -82,7 +82,7 @@ public class UserController {
     }
 
     @PutMapping("/manager/disable/{email}")
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity disableManager(@PathVariable("email") String email) {
         try {
             boolean success = userService.disableManager(email);
@@ -96,7 +96,7 @@ public class UserController {
     }
 
     @PutMapping("/disable/{email}")
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity disableCustomer(@PathVariable("email") String email) {
         try {
             boolean success = userService.disableCustomer(email);
@@ -116,6 +116,30 @@ public class UserController {
             userService.createUser(userDto);
             var response = authClient.login(new LoginRequest(userDto.getEmail(), userDto.getPassword()));
             return ResponseEntity.ok().body(response);
+        } catch (BusinessException e) {
+            LOGGER.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+
+    @PutMapping("/update")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CUSTOMER', 'FREQUENT_RENTER')")
+    public ResponseEntity update(@RequestBody UserDto userDto) {
+        try {
+            return ResponseEntity.ok().body(userService.updateUser(userDto));
+        } catch (BusinessException e) {
+            LOGGER.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+
+    @PutMapping("/manager/update/{userId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    public ResponseEntity update(@PathVariable(name = "userId") int userId, @RequestBody UserDto userDto) {
+        try {
+            return ResponseEntity.ok().body(userService.updateFullUser(userId, userDto));
         } catch (BusinessException e) {
             LOGGER.warn(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -171,22 +195,22 @@ public class UserController {
 
     @GetMapping("/reservations")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CUSTOMER', 'FREQUENT_RENTER')")
-    public ResponseEntity getCurrentReservations(@RequestParam(name = "email", defaultValue = "") String email) {
-        boolean isInvalidUser = authHelper.getRole() == Role.CUSTOMER && !email.equals(authHelper.getEmail());
+    public ResponseEntity getCurrentReservations(@RequestParam(name = "userId", defaultValue = "") int userId) {
+        boolean isInvalidUser = authHelper.getRole() == Role.CUSTOMER && userId != authHelper.getUserId();
 
         if (isInvalidUser) {
             return ResponseEntity.ok()
                     .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name()));
         }
 
-        var reservations = carRentalService.getCurrentReservations(email);
+        var reservations = carRentalService.getCurrentReservations(userId);
         return ResponseEntity.ok().body(reservations);
     }
 
     @GetMapping("/rental-history")
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'FREQUENT_RENTER')")
     public ResponseEntity getRentalHistory() {
-        var rentals = carRentalService.getRentalHistory(authHelper.getEmail());
+        var rentals = carRentalService.getRentalHistory(authHelper.getUserId());
         return ResponseEntity.ok().body(rentals);
     }
 
