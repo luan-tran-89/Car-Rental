@@ -37,7 +37,7 @@ public class RentalController {
     }
 
     @GetMapping("/car/{carId}")
-    public ResponseEntity<List<RentalDto>> getRentalsByUser(@PathVariable("carId") Integer carId) {
+    public ResponseEntity<List<RentalDto>> getRentalsByCar(@PathVariable("carId") Integer carId) {
         List<RentalDto> rentals = rentalService.getRentalsByCarId(carId);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
@@ -82,6 +82,16 @@ public class RentalController {
     public ResponseEntity<Boolean> checkUserActiveRentals(@PathVariable Integer userId) {
         boolean isRenting = rentalService.isUserCurrentlyRenting(userId);
         return new ResponseEntity<>(isRenting, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{userId}/reservations")
+    public ResponseEntity<List<RentalDto>> getReservations(@PathVariable Integer userId) {
+        return new ResponseEntity<>(rentalService.getReservationsByUser(userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<RentalDto>> getRentalsByUser(@PathVariable Integer userId) {
+        return new ResponseEntity<>(rentalService.getRentalsByUserId(userId), HttpStatus.OK);
     }
 
 

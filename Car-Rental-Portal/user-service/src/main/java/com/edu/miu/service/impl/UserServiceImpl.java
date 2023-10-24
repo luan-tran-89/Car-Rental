@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -217,7 +218,7 @@ public class UserServiceImpl implements UserService {
         card.setUser(user);
 
         List<Card> cards = user.getCards();
-        if (CollectionUtils.isEmpty(cards)) {
+        if (cards == null) {
             cards = new ArrayList<>();
         }
         cards.add(card);

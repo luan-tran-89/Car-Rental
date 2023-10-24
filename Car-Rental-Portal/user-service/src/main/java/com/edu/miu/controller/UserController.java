@@ -193,17 +193,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/rental-history/car/{carId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    public ResponseEntity getRentalHistoryByCar(@PathVariable(name = "carId") String carId) {
+        var rentals = carRentalService.getRentalHistory(authHelper.getUserId());
+        return ResponseEntity.ok().body(rentals);
+    }
+
     @GetMapping("/reservations")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CUSTOMER', 'FREQUENT_RENTER')")
-    public ResponseEntity getCurrentReservations(@RequestParam(name = "userId", defaultValue = "") int userId) {
-        boolean isInvalidUser = authHelper.getRole() == Role.CUSTOMER && userId != authHelper.getUserId();
-
-        if (isInvalidUser) {
-            return ResponseEntity.ok()
-                    .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name()));
-        }
-
-        var reservations = carRentalService.getCurrentReservations(userId);
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'FREQUENT_RENTER')")
+    public ResponseEntity getCurrentReservations() {
+        var reservations = carRentalService.getCurrentReservations(authHelper.getUserId());
         return ResponseEntity.ok().body(reservations);
     }
 

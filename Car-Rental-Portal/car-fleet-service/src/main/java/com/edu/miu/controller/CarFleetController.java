@@ -7,7 +7,6 @@ import com.edu.miu.enums.ReportFormat;
 import com.edu.miu.enums.TimeReport;
 import com.edu.miu.model.BusinessException;
 import com.edu.miu.model.CarFilter;
-import com.edu.miu.security.AuthHelper;
 import com.edu.miu.service.CarService;
 import com.edu.miu.service.ReportService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -72,6 +71,17 @@ public class CarFleetController {
     @PostMapping(value = "/add", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity addCarWithImg(@RequestParam(value = "car") CarDto carDto, @RequestParam(value = "img") MultipartFile img) {
         return ResponseEntity.ok().body(carService.addCarWithImg(carDto, img));
+    }
+
+    @PostMapping(value = "/addImage/{carId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity addCarImg(@PathVariable(value = "carId") int carId, @RequestParam(value = "img") MultipartFile img) {
+        try {
+            return ResponseEntity.ok().body(carService.addImgToCar(carId, img));
+        } catch (BusinessException e) {
+            LOGGER.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")

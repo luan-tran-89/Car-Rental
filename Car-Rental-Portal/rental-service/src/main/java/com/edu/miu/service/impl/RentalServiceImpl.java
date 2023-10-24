@@ -59,6 +59,11 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
+    public List<RentalDto> getRentalsByUserId(Integer userId) {
+        return this.convertFromRental(rentalRepository.findByUserId(userId));
+    }
+
+    @Override
     public Optional<Rental> findRentalById(Integer id) {
         return rentalRepository.findById(id);
     }
@@ -158,6 +163,12 @@ public class RentalServiceImpl implements RentalService {
         Date today = new Date();
         List<Rental> activeRentals = rentalRepository.findByUserIdAndEndDateAfter(userId, today);
         return !activeRentals.isEmpty();
+    }
+
+    @Override
+    public List<RentalDto> getReservationsByUser(Integer userId) {
+        List<Rental> activeRentals = rentalRepository.findByUserIdAndEndDateAfter(userId, new Date());
+        return this.convertFromRental(activeRentals);
     }
 
 

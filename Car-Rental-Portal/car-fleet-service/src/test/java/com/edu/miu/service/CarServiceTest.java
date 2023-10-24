@@ -206,6 +206,28 @@ public class CarServiceTest {
         verify(awsService, times(0)).uploadFile(any(), any());
     }
 
+    @DisplayName("JUnit test for addCarImg method.")
+    @Test
+    void addCarImg_Success() {
+        given(carRepository.findById(any()))
+                .willReturn(Optional.ofNullable(car));
+
+        given(carMapper.toDto(any()))
+                .willReturn(carDto);
+
+        given(awsService.uploadFile(any(), any()))
+                .willReturn("http://aws.test");
+
+        try {
+            CarDto result = carService.addImgToCar(car.getCarId(), file);
+            assertThat(result.getCarId()).isEqualTo(car.getCarId());
+            verify(carRepository, times(1)).save(any());
+            verify(awsService, times(1)).uploadFile(any(), any());
+        } catch (BusinessException e) {
+            fail("Expected exception should not thrown");
+        }
+    }
+
     @DisplayName("JUnit test for removeCar method.")
     @Test
     void removeCar_Success() {

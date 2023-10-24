@@ -2,6 +2,7 @@ package com.edu.miu.service.impl;
 
 import com.edu.miu.client.RentalClient;
 import com.edu.miu.dto.CarDto;
+import com.edu.miu.dto.RentalDto;
 import com.edu.miu.enums.ReportFormat;
 import com.edu.miu.enums.TimeReport;
 import com.edu.miu.model.BusinessException;
@@ -11,6 +12,7 @@ import com.edu.miu.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.modelmapper.ModelMapper;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
@@ -19,9 +21,8 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author gasieugru
@@ -35,6 +36,8 @@ public class ReportServiceImpl implements ReportService {
     private final RentalClient rentalClient;
 
     private final CircuitBreakerFactory breakerFactory;
+
+    private final ModelMapper modelMapper;
 
     @Override
     public byte[] getCarReport(int carId, ReportFormat format) {
@@ -84,14 +87,23 @@ public class ReportServiceImpl implements ReportService {
     public byte[] exportCarRentalReport(TimeReport timeReport, ReportFormat format) {
         try {
             var rentalReport = this.getCarRentalReport(timeReport);
+            var data = rentalReport.stream()
+                    .map(r -> modelMapper.map(r, RentalDto.class)).collect(Collectors.toList());
+
+//            List<RentalDto> rentalReport = new ArrayList<>();
+//            Date today = new Date();
+//            rentalReport.add(new RentalDto(1, 1, 5, today, today, 1, 200.0));
+//            rentalReport.add(new RentalDto(2, 2, 6, today, today, 2, 100.0));
+//            rentalReport.add(new RentalDto(3, 3, 7, today, today, 3, 300.0));
+//            rentalReport.add(new RentalDto(4, 4, 8, today, today, 4, 400.0));
 
             File file = ResourceUtils.getFile("classpath:reports/CarRentalReport.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
 
             Map<String, Object> params = new HashMap<>();
-            params.put("title", "Car Rental Report");
+            params.put("title", String.format("Car Rental Report - %s", timeReport));
 
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(rentalReport);
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data);
 
             return this.generateReport(jasperReport, params, dataSource, format);
         } catch (FileNotFoundException e) {

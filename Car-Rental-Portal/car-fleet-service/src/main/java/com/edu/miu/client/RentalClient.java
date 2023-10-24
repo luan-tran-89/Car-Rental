@@ -24,10 +24,10 @@ public interface RentalClient {
     @GetMapping("/rentals/user/{userId}")
     List<Object> getRentalsByUser(@PathVariable("userId") Integer userId);
 
-    @GetMapping("/rentals/car/{userId}")
+    @GetMapping("/rentals/car/{carId}")
     List<Object> getRentalsByCar(@PathVariable("carId") Integer carId);
 
-    @GetMapping
+    @GetMapping("/rentals/user/{userId}/reservations")
     List<Object> getReservations(@PathVariable("userId") Integer userId);
 
     @GetMapping("/rentals/user/{userId}/active-rentals")

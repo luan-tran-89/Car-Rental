@@ -47,4 +47,11 @@ public class CarRentalServiceImpl implements CarRentalService {
         List<Object> data = circuitBreaker.run(() -> rentalClient.getRentalsByUser(userId), throwable -> null);
         return data;
     }
+
+    @Override
+    public List<Object> getRentalHistoryByCar(int carId) {
+        CircuitBreaker circuitBreaker = breakerFactory.create("car-rental-history-fetching");
+        List<Object> data = circuitBreaker.run(() -> rentalClient.getRentalsByCar(carId), throwable -> null);
+        return data;
+    }
 }
