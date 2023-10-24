@@ -15,7 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Using Single Table Inheritance
 @DiscriminatorColumn(name = "card_type", discriminatorType = DiscriminatorType.STRING)
-public abstract class PaymentMethod {
+public class PaymentMethod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

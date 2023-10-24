@@ -38,6 +38,14 @@ public interface CarService {
     CarDto addCarWithImg(CarDto car, MultipartFile image);
 
     /**
+     * Add image to a car
+     * @param carId
+     * @param image
+     * @return CarDto
+     */
+    CarDto addImgToCar(int carId, MultipartFile image) throws BusinessException;
+
+    /**
      * Remove a car
      * @param carId
      * @return true if successful, otherwise false

@@ -71,15 +71,24 @@ public class CarServiceImpl implements CarService {
     public CarDto addCarWithImg(CarDto carDto, MultipartFile image) {
         Car car = carMapper.toEntity(carDto);
         carRepository.save(car);
+        this.addImageToCar(car, image);
+        return carMapper.toDto(car);
+    }
 
+    @Override
+    public CarDto addImgToCar(int carId, MultipartFile image) throws BusinessException {
+        Car car = this.findById(carId);
+        this.addImageToCar(car, image);
+        return carMapper.toDto(car);
+    }
+
+    private void addImageToCar(Car car, MultipartFile image) {
         if (image != null) {
             String path = String.format("car_%s", car.getCarId());
             String url = awsService.uploadFile(image, path);
             car.setImage(url);
             carRepository.save(car);
         }
-
-        return carMapper.toDto(car);
     }
 
     @Override

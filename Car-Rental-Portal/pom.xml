@@ -10,6 +10,7 @@
         <module>user-service</module>
         <module>car-fleet-service</module>
         <module>rental-service</module>
+        <module>payment-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
