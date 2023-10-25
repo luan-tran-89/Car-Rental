@@ -4,9 +4,16 @@ import com.edu.miu.dto.RentalDto;
 import com.edu.miu.service.RentalService;
 import com.edu.miu.domain.Rental;
 import com.edu.miu.dto.ReservationDTO;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +21,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/rentals")
+@Tag(name = "Rental Service", description = "Business Rental Service")
+@OpenAPIDefinition(servers = { @Server(url = "/payment-methods")},
+        info = @Info(title = "Car Rental System - Rental Service", version = "v1",
+                description = "This is a documentation for the Rental Service",
+                license = @License(name = "Apache 2.0", url = "http://car-fleet-license.com"),
+                contact = @Contact(url = "http://car-fleet.com", name = "Car Fleet", email = "car-fleet@gmail"))
+)
 public class RentalController {
 
     @Autowired

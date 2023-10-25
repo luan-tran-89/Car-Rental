@@ -41,45 +41,45 @@ public class CarRentalServiceTest {
 
     @BeforeEach
     void setUp() {
-        circuitBreaker = Mockito.mock(CircuitBreaker.class);
-        given(breakerFactory.create(any()))
-                .willReturn(circuitBreaker);
+//        circuitBreaker = Mockito.mock(CircuitBreaker.class);
+//        given(breakerFactory.create(any()))
+//                .willReturn(circuitBreaker);
         carRentalService = new CarRentalServiceImpl(rentalClient, breakerFactory);
     }
 
     @DisplayName("JUnit test for getCurrentReservations method.")
     @Test
     void isUserCurrentlyRenting_Success() {
-        given(circuitBreaker.run(any(), any()))
+        given(rentalClient.isUserCurrentlyRenting(any()))
                 .willReturn(true);
         carRentalService.isUserCurrentlyRenting(1);
-        verify(circuitBreaker, times(1)).run(any(), any());
+        verify(rentalClient, times(1)).isUserCurrentlyRenting(any());
     }
 
     @DisplayName("JUnit test for getCurrentReservations method.")
     @Test
     void getCurrentReservations_Success() {
-        given(circuitBreaker.run(any(), any()))
+        given(rentalClient.getReservations(any()))
                 .willReturn(new ArrayList<>());
         carRentalService.getCurrentReservations(1);
-        verify(circuitBreaker, times(1)).run(any(), any());
+        verify(rentalClient, times(1)).getReservations(any());
     }
 
     @DisplayName("JUnit test for getAllRentalHistory method.")
     @Test
     void getAllRentalHistory_Success() {
-        given(circuitBreaker.run(any(), any()))
+        given(rentalClient.getAllRentals())
                 .willReturn(new ArrayList<>());
         carRentalService.getAllRentalHistory();
-        verify(circuitBreaker, times(1)).run(any(), any());
+        verify(rentalClient, times(1)).getAllRentals();
     }
 
     @DisplayName("JUnit test for getRentalHistory method.")
     @Test
     void getRentalHistory_Success() {
-        given(circuitBreaker.run(any(), any()))
+        given(rentalClient.getRentalsByUser(any()))
                 .willReturn(new ArrayList<>());
         carRentalService.getRentalHistory(1);
-        verify(circuitBreaker, times(1)).run(any(), any());
+        verify(rentalClient, times(1)).getRentalsByUser(any());
     }
 }

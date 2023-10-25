@@ -23,7 +23,7 @@ public class Payment {
     private Integer paymentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "method_id", referencedColumnName = "id")
+    @JoinColumn(name = "method_id", referencedColumnName = "methodId")
     private PaymentMethod paymentMethod;
 
     @Column(name = "payment_amount")

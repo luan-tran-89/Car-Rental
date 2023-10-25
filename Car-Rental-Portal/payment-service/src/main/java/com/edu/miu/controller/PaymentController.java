@@ -3,6 +3,12 @@ package com.edu.miu.controller;
 import com.edu.miu.dto.PaymentDTO;
 import com.edu.miu.service.PaymentService;
 import com.edu.miu.mapper.PaymentMapper;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,7 +19,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/payments")
+@RequestMapping("/payments")
+@Tag(name = "Payment Service", description = "Business Payment Service")
+@OpenAPIDefinition(servers = { @Server(url = "/payment-service")},
+        info = @Info(title = "Car Rental System - Payment Service", version = "v1",
+                description = "This is a documentation for the Payment Service",
+                license = @License(name = "Apache 2.0", url = "http://car-fleet-license.com"),
+                contact = @Contact(url = "http://car-fleet.com", name = "Car Fleet", email = "car-fleet@gmail"))
+)
 public class PaymentController {
 
     @Autowired
