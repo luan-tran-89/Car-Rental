@@ -1,6 +1,5 @@
 package com.edu.miu.domain;
 
-import com.edu.miu.enums.CardType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Builder
+//@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Using Single Table Inheritance

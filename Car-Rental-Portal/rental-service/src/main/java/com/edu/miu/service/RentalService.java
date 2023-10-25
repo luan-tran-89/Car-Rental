@@ -4,6 +4,7 @@ import com.edu.miu.domain.Rental;
 //import rentalservice.domain.PaymentMethod;
 import com.edu.miu.domain.Car;
 import com.edu.miu.domain.User;
+import com.edu.miu.dto.PaymentMethodDTO;
 import com.edu.miu.dto.RentalDto;
 
 import java.util.List;
@@ -88,8 +89,42 @@ public interface RentalService {
      * Adds a payment method for a user.
      *
      * @param userId ID of the user to whom the payment method will be added.
-     * @param paymentMethodId The ID of the payment details to be added.
+     * @param paymentMethodDetails The details of the payment method to be added.
      * @return True if payment method was added successfully, false otherwise.
      */
-    // boolean addPaymentMethod(Integer userId, Integer paymentMethodId);
+    boolean addPaymentMethod(Integer userId, PaymentMethodDTO paymentMethodDetails);
+
+    /**
+     * Finalizes a rental. This includes processing payment and potentially other activities
+     * like updating car status, sending notifications, etc.
+     *
+     * @param rentalId ID of the rental to be finalized.
+     * @param paymentMethodId ID of the payment method chosen for this rental.
+     * @return Details of the finalized rental.
+     */
+    Rental finalizeRental(Integer rentalId, Integer paymentMethodId);
+
+    /**
+     * Allows for direct booking and payment without the need for a prior reservation.
+     *
+     * @param carId The ID of the car to be rented.
+     * @param userId The ID of the user making the rental.
+     * @param startDate The start date of the rental.
+     * @param endDate The end date of the rental.
+     * @param paymentMethodId ID of the payment method chosen for this rental.
+     * @return Details of the direct booking.
+     */
+    Rental directBooking(Integer carId, Integer userId, Date startDate, Date endDate, Integer paymentMethodId);
+
+    /**
+     * Cancels a rental reservation.
+     *
+     * @param rentalId ID of the rental to be canceled.
+     * @param userId ID of the user requesting the cancellation.
+     * @return True if the cancellation was successful, false otherwise.
+     */
+    boolean cancelReservation(Integer rentalId, Integer userId);
+
+
 }
+
