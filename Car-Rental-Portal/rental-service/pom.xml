@@ -7,7 +7,7 @@
         <groupId>com.edu.miu</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.example</groupId>
+    <groupId>com.edu.miu</groupId>
     <artifactId>rental-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>rental-service</name>
@@ -38,6 +38,18 @@
 <!--            <groupId>org.springframework.cloud</groupId>-->
 <!--            <artifactId>spring-cloud-starter-gateway</artifactId>-->
 <!--        </dependency>-->
+
+        <!-- Spring Boot Starter for Logging -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+        <!-- MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.4.2.Final</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>

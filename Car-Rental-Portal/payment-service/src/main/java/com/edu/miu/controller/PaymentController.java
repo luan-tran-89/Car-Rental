@@ -71,5 +71,27 @@ public class PaymentController {
         return ResponseEntity.badRequest().body(errorMsg);
     }
 
+    @PostMapping("/process")
+    public ResponseEntity<String> processPayment(@RequestParam("paymentMethodId") Integer paymentMethodId,
+                                                 @RequestParam("amount") Double amount) {
+        try {
+            boolean isSuccess = paymentService.processPayment(paymentMethodId, amount);
+
+            if (isSuccess) {
+                return ResponseEntity.ok("Payment processed successfully.");
+            } else {
+                return ResponseEntity.status(400).body("Payment failed due to insufficient balance or other reasons.");
+            }
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage()); // Payment method not found or other issues.
+
+        } catch (Exception e) {
+            // This catches all other exceptions that might occur, such as database errors.
+            return ResponseEntity.status(500).body("An internal error occurred while processing the payment.");
+        }
+    }
+
+
     // You can add other endpoints and exception handlers based on your application requirements.
 }

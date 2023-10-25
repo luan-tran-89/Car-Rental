@@ -21,4 +21,7 @@ public interface PaymentService {
     List<Payment> findAllPayments();
 
     List<Payment> findByStatus(PaymentStatus status);
+
+    boolean processPayment(Integer paymentMethodId, Double amount);
+
 }
