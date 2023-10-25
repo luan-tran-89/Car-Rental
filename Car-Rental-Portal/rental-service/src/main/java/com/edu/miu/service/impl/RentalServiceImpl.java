@@ -20,8 +20,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.edu.miu.enums.TimeReport;
 
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -372,6 +374,54 @@ public class RentalServiceImpl implements RentalService {
             throw new RuntimeException("Error while adding payment method.", e);
         }
     }
+
+    @Override
+    public List<Rental> fetchRentalsByTimeReport(ReportFilter reportFilter) {
+        Calendar cal = Calendar.getInstance();
+
+        Date startDate;
+        Date endDate;
+        switch (reportFilter.getTimeReport()) {
+            case MONTHLY:
+                // set the year and month from the ReportFilter
+                cal.set(Calendar.YEAR, reportFilter.getYear());
+                cal.set(Calendar.MONTH, reportFilter.getMonth() - 1);  // month is 0-based
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                startDate = cal.getTime();
+
+                cal.add(Calendar.MONTH, 1);
+                cal.add(Calendar.DAY_OF_MONTH, -1);
+                endDate = cal.getTime();
+                break;
+            case QUARTERLY:
+                // set the year and quarter from the ReportFilter
+                int startMonth = (reportFilter.getQuarter() - 1) * 3;
+                cal.set(Calendar.YEAR, reportFilter.getYear());
+                cal.set(Calendar.MONTH, startMonth);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                startDate = cal.getTime();
+
+                cal.add(Calendar.MONTH, 3);
+                cal.add(Calendar.DAY_OF_MONTH, -1);
+                endDate = cal.getTime();
+                break;
+            case ANNUAL:
+                // set the year from the ReportFilter
+                cal.set(Calendar.YEAR, reportFilter.getYear());
+                cal.set(Calendar.DAY_OF_YEAR, 1);
+                startDate = cal.getTime();
+
+                cal.add(Calendar.YEAR, 1);
+                cal.add(Calendar.DAY_OF_YEAR, -1);
+                endDate = cal.getTime();
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported Time Report");
+        }
+
+        return rentalRepository.findByStartDateBetween(startDate, endDate);
+    }
+
 
 }
 

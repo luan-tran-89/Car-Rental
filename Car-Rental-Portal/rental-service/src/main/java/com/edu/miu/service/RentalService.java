@@ -6,6 +6,8 @@ import com.edu.miu.domain.Car;
 import com.edu.miu.domain.User;
 import com.edu.miu.dto.PaymentMethodDTO;
 import com.edu.miu.dto.RentalDto;
+import com.edu.miu.dto.ReportFilter;
+import com.edu.miu.enums.TimeReport;
 
 import java.util.List;
 import java.util.Optional;
@@ -139,6 +141,8 @@ public interface RentalService {
      * @return True if the cancellation was successful, false otherwise.
      */
     boolean cancelReservation(Integer rentalId, Integer userId);
+
+    List<Rental> fetchRentalsByTimeReport(ReportFilter reportFilter);
 
 
 }
