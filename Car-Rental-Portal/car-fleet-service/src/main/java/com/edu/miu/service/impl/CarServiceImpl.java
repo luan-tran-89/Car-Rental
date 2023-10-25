@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -232,22 +233,25 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<Object> getAllRentalHistory() {
-        CircuitBreaker circuitBreaker = breakerFactory.create("all-rentals-fetching");
-        var data = circuitBreaker.run(() -> rentalClient.getAllRentals(), throwable -> null);
-        return data;
+//        CircuitBreaker circuitBreaker = breakerFactory.create("all-rentals-fetching");
+//        var data = circuitBreaker.run(() -> rentalClient.getAllRentals(), throwable -> null);
+        List<Object> data = rentalClient.getAllRentals();
+        return data == null ? new ArrayList<>() : data;
     }
 
     @Override
     public List<Object> getRentalHistoryByUserId(int userId) {
-        CircuitBreaker circuitBreaker = breakerFactory.create("user-rentals-fetching");
-        var data = circuitBreaker.run(() -> rentalClient.getRentalsByUser(userId), throwable -> null);
-        return data;
+//        CircuitBreaker circuitBreaker = breakerFactory.create("user-rentals-fetching");
+//        var data = circuitBreaker.run(() -> rentalClient.getRentalsByUser(userId), throwable -> null);
+        List<Object> data = rentalClient.getRentalsByUser(userId);
+        return data == null ? new ArrayList<>() : data;
     }
 
     @Override
     public List<Object> getRentalHistoryByCarId(int carId) {
-        CircuitBreaker circuitBreaker = breakerFactory.create("car-rentals-fetching");
-        var data = circuitBreaker.run(() -> rentalClient.getRentalsByCar(carId), throwable -> null);
-        return data;
+//        CircuitBreaker circuitBreaker = breakerFactory.create("car-rentals-fetching");
+//        var data = circuitBreaker.run(() -> rentalClient.getRentalsByCar(carId), throwable -> null);
+        List<Object> data = rentalClient.getRentalsByCar(carId);
+        return data == null ? new ArrayList<>() : data;
     }
 }

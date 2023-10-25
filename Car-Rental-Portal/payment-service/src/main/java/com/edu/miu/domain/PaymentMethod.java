@@ -30,6 +30,10 @@ public class PaymentMethod {
     @Column(nullable = false)
     private String cvv;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "card_type", columnDefinition = "ENUM('VISA', 'MASTER_CARD')", insertable = false, updatable = false)
+    private CardType cardType;
+
     @Column(name = "approval_amount", nullable = false)
     private Double approvalAmount;
 

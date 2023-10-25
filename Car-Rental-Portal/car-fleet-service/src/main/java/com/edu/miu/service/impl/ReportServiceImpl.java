@@ -78,9 +78,10 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public List<Object> getCarRentalReport(TimeReport timeReport) {
-        CircuitBreaker circuitBreaker = breakerFactory.create("reservations-fetching");
-        var data = circuitBreaker.run(() -> rentalClient.getRentalReport(timeReport), throwable -> null);
-        return data;
+//        CircuitBreaker circuitBreaker = breakerFactory.create("reservations-fetching");
+//        var data = circuitBreaker.run(() -> rentalClient.getRentalReport(timeReport), throwable -> null);
+        List<Object> data = rentalClient.getRentalReport(timeReport);
+        return data == null ? new ArrayList<>() : data;
     }
 
     @Override
