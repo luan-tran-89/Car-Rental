@@ -35,4 +35,11 @@ public interface CarRentalService {
      */
     List<Object> getRentalHistory(int userId);
 
+    /**
+     * Get Rental History for user
+     * @param carId
+     * @return list of rental history for user
+     */
+    List<Object> getRentalHistoryByCar(int carId);
+
 }

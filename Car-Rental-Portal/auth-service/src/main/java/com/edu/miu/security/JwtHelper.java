@@ -15,7 +15,7 @@ public class JwtHelper {
     @Value("${jwt.secret-key:top-secret}")
     private String secret;
 
-    @Value("${jwt.expiration:600000}")
+    @Value("${jwt.expiration:1800000}")
     private long expiration;
 
     public String generateToken(AwesomeUserDetails user) {

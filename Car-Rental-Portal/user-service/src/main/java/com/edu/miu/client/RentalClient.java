@@ -18,10 +18,13 @@ public interface RentalClient {
     @GetMapping("/rentals")
     List<Object> getAllRentals();
 
-    @GetMapping("/rentals/{userId}")
+    @GetMapping("/rentals/user/{userId}")
     List<Object> getRentalsByUser(@PathVariable("userId") Integer userId);
 
-    @GetMapping
+    @GetMapping("/rentals/user/{userId}/reservations")
     List<Object> getReservations(@PathVariable("userId") Integer userId);
+
+    @GetMapping("/rentals/car/{carId}")
+    List<Object> getRentalsByCar(@PathVariable("carId") Integer carId);
 
 }

@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
  * @author gasieugru
  */
 @Component
-public class CarMapper extends Mapper<Card, CardDto> {
+public class CardMapper extends Mapper<Card, CardDto> {
 
-    public CarMapper() {
+    public CardMapper() {
         super(Card.class, CardDto.class);
     }
 

@@ -32,6 +32,14 @@ public interface RentalService {
     List<RentalDto> getRentalsByCarId(Integer carId);
 
     /**
+     * Get Rentals By User Id
+     *
+     * @param userId
+     * @return list of RentalDto
+     */
+    List<RentalDto> getRentalsByUserId(Integer userId);
+
+    /**
      * Fetches a rental by its ID.
      *
      * @param id ID of the rental to be fetched.
@@ -83,6 +91,13 @@ public interface RentalService {
 
     // to check if the customer is an active rental before we disable him
     boolean isUserCurrentlyRenting(Integer userId);
+
+    /**
+     * Get Reservations of a user
+     * @param userId
+     * @return list of reservations
+     */
+    List<RentalDto> getReservationsByUser(Integer userId);
 
 
     /**
