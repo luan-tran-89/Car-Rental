@@ -1,5 +1,6 @@
 package com.edu.miu.client;
 
+import com.edu.miu.dto.RentalDto;
 import com.edu.miu.enums.TimeReport;
 import org.springframework.cloud.openfeign.FeignClient;
 //import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -15,11 +16,19 @@ import java.util.List;
 @FeignClient(name = "RENTAL-SERVICE")
 public interface RentalClient {
 
+    /*@GetMapping("/rental-history")
+    List<RentalDto> fetchRentalsByTimeReport(@RequestParam TimeReport timeReport);*/
     @GetMapping("/rentals")
     List<Object> getAllRentals();
 
-    @GetMapping("/rental-report")
-    List<Object> getRentalReport(@RequestParam("timeReport") TimeReport timeReport);
+    /*@GetMapping("/rental-history")
+    List<Object> getRentalReport(@RequestParam("timeReport") TimeReport timeReport);*/
+
+    @GetMapping("/api/rentals/rental-history")
+    List<Object> getRentalReport(@RequestParam("timeReport") String timeReport,
+                                          @RequestParam("month") int month,
+                                          @RequestParam("quarter") int quarter,
+                                          @RequestParam("year") int year);
 
     @GetMapping("/rentals/user/{userId}")
     List<Object> getRentalsByUser(@PathVariable("userId") Integer userId);

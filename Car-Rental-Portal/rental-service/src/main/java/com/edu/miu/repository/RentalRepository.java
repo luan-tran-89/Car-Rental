@@ -21,4 +21,7 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
 
     // New method to find rentals for a user that are reserved (unpaid).
     List<Rental> findByUserIdAndPaymentIdIsNull(Integer userId);
+    List<Rental> findByStartDateBetween(Date startDate, Date endDate);
+
+
 }
