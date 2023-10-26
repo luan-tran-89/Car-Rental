@@ -1,15 +1,18 @@
 package com.edu.miu.controller;
 
+import com.edu.miu.dto.ErrorResponse;
 import com.edu.miu.dto.PaymentDTO;
 import com.edu.miu.service.PaymentService;
-import com.edu.miu.mapper.PaymentMapper;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -29,35 +32,45 @@ import java.util.stream.Collectors;
 )
 public class PaymentController {
 
+    private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
+
     @Autowired
     private PaymentService paymentService;
 
-    @Autowired
-    private PaymentMapper paymentMapper;
-
     @PostMapping
-    public ResponseEntity<PaymentDTO> createPayment(@Valid @RequestBody PaymentDTO paymentDTO) {
-        return ResponseEntity.ok(paymentMapper.toDTO(paymentService.createPayment(paymentMapper.toEntity(paymentDTO))));
+    public ResponseEntity<?> createPayment(@Valid @RequestBody PaymentDTO paymentDTO) {
+        try {
+            return ResponseEntity.ok(paymentService.createPayment(paymentDTO));
+        } catch (Exception e){
+            logger.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+
+        }
     }
 
     @PutMapping("/{paymentId}")
-    public ResponseEntity<PaymentDTO> updatePayment(@PathVariable Integer paymentId, @Valid @RequestBody PaymentDTO paymentDTO) {
-        if (!paymentId.equals(paymentDTO.getPaymentId())) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> updatePayment(@PathVariable Integer paymentId, @Valid @RequestBody PaymentDTO paymentDTO) {
+        try {
+            return ResponseEntity.ok(paymentService.updatePayment(paymentId, paymentDTO));
+        } catch (Exception e){
+            logger.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+
         }
-        return ResponseEntity.ok(paymentMapper.toDTO(paymentService.updatePayment(paymentMapper.toEntity(paymentDTO))));
     }
 
     @GetMapping("/{paymentId}")
     public ResponseEntity<PaymentDTO> findPaymentById(@PathVariable Integer paymentId) {
-        return ResponseEntity.ok(paymentMapper.toDTO(paymentService.findPaymentById(paymentId)));
+        return ResponseEntity.ok(paymentService.findPaymentById(paymentId));
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PaymentDTO>> findPaymentsByUserId(@PathVariable Integer userId) {
         List<PaymentDTO> payments = paymentService.findPaymentsByUserId(userId)
                 .stream()
-                .map(paymentMapper::toDTO)
+                .map(PaymentDTO::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(payments);
     }
