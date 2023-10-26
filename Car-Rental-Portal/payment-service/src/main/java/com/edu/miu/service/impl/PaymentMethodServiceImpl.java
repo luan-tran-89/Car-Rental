@@ -47,7 +47,7 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
 
         switch (cardType) {
             case VISA -> savedPaymentMethod = modelMapper.map(paymentMethod, VisaPaymentMethod.class);
-            case MASTERCARD -> savedPaymentMethod = modelMapper.map(paymentMethod, MasterCardPaymentMethod.class);
+            case MASTER_CARD -> savedPaymentMethod = modelMapper.map(paymentMethod, MasterCardPaymentMethod.class);
             default -> throw new BusinessException(String.format("Unknown card type %s", cardType));
         }
 

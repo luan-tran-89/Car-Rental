@@ -11,7 +11,7 @@ public class PaymentMethodFactory {
     public PaymentMethod paymentMethod(PaymentMethodDTO dto) {
         if (dto.getCardType() == CardType.VISA) {
             return new VisaPaymentMethod();
-        } else if (dto.getCardType() == CardType.MASTERCARD) {
+        } else if (dto.getCardType() == CardType.MASTER_CARD) {
             return new MasterCardPaymentMethod();
         } else {
             throw new IllegalArgumentException("Unsupported Card Type");

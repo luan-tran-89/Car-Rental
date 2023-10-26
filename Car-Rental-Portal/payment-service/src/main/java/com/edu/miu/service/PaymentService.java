@@ -1,6 +1,7 @@
 package com.edu.miu.service;
 
 import com.edu.miu.domain.Payment;
+import com.edu.miu.dto.PaymentDTO;
 import com.edu.miu.enums.PaymentStatus;
 
 import java.util.List;
@@ -8,11 +9,11 @@ import java.util.Optional;
 
 public interface PaymentService {
 
-    Payment createPayment(Payment payment);
+    PaymentDTO createPayment(PaymentDTO payment);
 
-    Payment updatePayment(Payment payment);
+    PaymentDTO updatePayment(Integer paymentId, PaymentDTO payment);
 
-    Payment findPaymentById(Integer paymentId); // changed from findById to findPaymentById
+    PaymentDTO findPaymentById(Integer paymentId); // changed from findById to findPaymentById
 
     List<Payment> findPaymentsByUserId(Integer userId); // changed from findByPaymentMethodUserId to findPaymentsByUserId
 
