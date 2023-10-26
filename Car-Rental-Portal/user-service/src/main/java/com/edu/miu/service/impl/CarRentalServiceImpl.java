@@ -1,11 +1,8 @@
 package com.edu.miu.service.impl;
 
 import com.edu.miu.client.RentalClient;
-import com.edu.miu.security.AuthHelper;
 import com.edu.miu.service.CarRentalService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 

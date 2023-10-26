@@ -1,6 +1,9 @@
 package com.edu.miu.controller;
 
 import com.edu.miu.domain.PaymentMethod;
+import com.edu.miu.dto.BusinessException;
+import com.edu.miu.dto.ErrorResponse;
+import com.edu.miu.dto.PaymentMethodDTO;
 import com.edu.miu.enums.CardType;
 import com.edu.miu.service.PaymentMethodService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -12,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/payment-methods")
-@Tag(name = "User Service", description = "Business Payment Methods Service")
+@Tag(name = "Payment Methods Service", description = "Business Payment Methods Service")
 @OpenAPIDefinition(servers = { @Server(url = "/payment-methods")},
         info = @Info(title = "Car Rental System - Payment Methods Service", version = "v1",
                 description = "This is a documentation for the Payment Methods Service",
@@ -35,32 +39,40 @@ public class PaymentMethodController {
     private PaymentMethodService paymentMethodService;
 
     @PostMapping
-    public ResponseEntity<PaymentMethod> createPaymentMethod(@RequestBody PaymentMethod paymentMethod) {
-        PaymentMethod savedPaymentMethod = paymentMethodService.createPaymentMethod(paymentMethod);
-        logger.info("PaymentMethod with ID: {} created successfully.", savedPaymentMethod.getMethodId());
-        return ResponseEntity.ok(savedPaymentMethod);
+    public ResponseEntity<?> createPaymentMethod(@RequestBody PaymentMethodDTO paymentMethod) {
+        try {
+            PaymentMethodDTO savedPaymentMethod = paymentMethodService.createPaymentMethod(paymentMethod);
+            logger.info("PaymentMethod with ID: {} created successfully.", savedPaymentMethod.getMethodId());
+            return ResponseEntity.ok(savedPaymentMethod);
+        } catch (BusinessException e) {
+            logger.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PaymentMethod> updatePaymentMethod(@PathVariable Integer id, @RequestBody PaymentMethod paymentMethod) {
-        if (!id.equals(paymentMethod.getMethodId())) {
-            logger.warn("Mismatch between ID in path and ID in request body.");
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> updatePaymentMethod(@PathVariable Integer id, @RequestBody PaymentMethodDTO paymentMethod) {
+        try {
+            PaymentMethodDTO updatedPaymentMethod = paymentMethodService.updatePaymentMethod(id, paymentMethod);
+            logger.info("PaymentMethod with ID: {} updated successfully.", updatedPaymentMethod.getMethodId());
+            return ResponseEntity.ok(updatedPaymentMethod);
+        } catch (BusinessException e) {
+            logger.warn(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
         }
-        PaymentMethod updatedPaymentMethod = paymentMethodService.updatePaymentMethod(paymentMethod);
-        logger.info("PaymentMethod with ID: {} updated successfully.", updatedPaymentMethod.getMethodId());
-        return ResponseEntity.ok(updatedPaymentMethod);
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<List<PaymentMethod>> findByUserId(@PathVariable Integer userId) {
-        List<PaymentMethod> paymentMethods = paymentMethodService.findByUserId(userId);
+    public ResponseEntity<List<PaymentMethodDTO>> findByUserId(@PathVariable Integer userId) {
+        List<PaymentMethodDTO> paymentMethods = paymentMethodService.findByUserId(userId);
         return ResponseEntity.ok(paymentMethods);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PaymentMethod> findById(@PathVariable Integer id) {
-        Optional<PaymentMethod> paymentMethod = paymentMethodService.findById(id);
+    public ResponseEntity<?> findById(@PathVariable Integer id) {
+        Optional<PaymentMethodDTO> paymentMethod = paymentMethodService.findById(id);
         return paymentMethod.map(ResponseEntity::ok).orElseGet(() -> {
             logger.warn("PaymentMethod with ID: {} not found.", id);
             return ResponseEntity.notFound().build();
@@ -75,14 +87,14 @@ public class PaymentMethodController {
     }
 
     @GetMapping("/type/{cardType}")
-    public ResponseEntity<List<PaymentMethod>> findByCardType(@PathVariable CardType cardType) {
-        List<PaymentMethod> paymentMethods = paymentMethodService.findByCardType(cardType);
+    public ResponseEntity<List<PaymentMethodDTO>> findByCardType(@PathVariable CardType cardType) {
+        List<PaymentMethodDTO> paymentMethods = paymentMethodService.findByCardType(cardType);
         return ResponseEntity.ok(paymentMethods);
     }
 
     @GetMapping("/card/{cardNumber}")
-    public ResponseEntity<PaymentMethod> findByCardNumber(@PathVariable String cardNumber) {
-        Optional<PaymentMethod> paymentMethod = paymentMethodService.findByCardNumber(cardNumber);
+    public ResponseEntity<PaymentMethodDTO> findByCardNumber(@PathVariable String cardNumber) {
+        Optional<PaymentMethodDTO> paymentMethod = paymentMethodService.findByCardNumber(cardNumber);
         return paymentMethod.map(ResponseEntity::ok).orElseGet(() -> {
             logger.warn("PaymentMethod with card number: {} not found.", cardNumber);
             return ResponseEntity.notFound().build();

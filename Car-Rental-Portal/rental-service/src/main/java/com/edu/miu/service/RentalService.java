@@ -142,7 +142,7 @@ public interface RentalService {
      */
     boolean cancelReservation(Integer rentalId, Integer userId);
 
-    List<Rental> fetchRentalsByTimeReport(ReportFilter reportFilter);
+    List<RentalDto> fetchRentalsByTimeReport(ReportFilter reportFilter);
 
 
 }

@@ -3,6 +3,7 @@ package com.edu.miu.controller;
 import com.edu.miu.dto.CarDto;
 import com.edu.miu.dto.ErrorResponse;
 import com.edu.miu.dto.MaintenanceDto;
+import com.edu.miu.dto.ReportFilter;
 import com.edu.miu.enums.ReportFormat;
 import com.edu.miu.enums.TimeReport;
 import com.edu.miu.model.BusinessException;
@@ -171,15 +172,15 @@ public class CarFleetController {
 
     @GetMapping("/car-rental-report")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseEntity getCarRentalReport(@RequestParam(value = "timeReport", defaultValue = "MONTHLY") TimeReport timeReport) {
-        return ResponseEntity.ok().body(reportService.getCarRentalReport(timeReport));
+    public ResponseEntity getCarRentalReport(ReportFilter reportFilter) {
+        return ResponseEntity.ok().body(reportService.getCarRentalReport(reportFilter));
     }
 
     @GetMapping("/export-car-rental-report")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseEntity exportCarRentalReport(@RequestParam(value = "timeReport", defaultValue = "MONTHLY") TimeReport timeReport,
+    public ResponseEntity exportCarRentalReport(ReportFilter reportFilter,
                                                 @RequestParam(value = "format", defaultValue = "PDF") ReportFormat format) {
-        return ResponseEntity.ok().body(reportService.exportCarRentalReport(timeReport, format));
+        return ResponseEntity.ok().body(reportService.exportCarRentalReport(reportFilter, format));
     }
 
 }
