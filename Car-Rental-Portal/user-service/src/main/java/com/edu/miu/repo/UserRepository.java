@@ -41,4 +41,11 @@ public interface UserRepository extends CrudRepository<User, Integer> {
      */
     List<User> findByUserRole(Role role);
 
+    /**
+     * Find user by roles
+     * @param roles
+     * @return Users
+     */
+    List<User> findByUserRoleIn(List<Role> roles);
+
 }

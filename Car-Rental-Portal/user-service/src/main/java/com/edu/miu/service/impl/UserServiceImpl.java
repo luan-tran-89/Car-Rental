@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllCustomers() {
-        return userMapper.toListDto(userRepository.findByUserRole(Role.CUSTOMER));
+        return userMapper.toListDto(userRepository.findByUserRoleIn(List.of(Role.CUSTOMER, Role.FREQUENT_RENTER)));
     }
 
     @Override

@@ -24,5 +24,5 @@ VALUES ('Honda CR-V, Insurance, 48 hours ', 100, 'COMPLETED', '2023-10-20', 1),
        ('BMW X7, Insurance, 48 hours ', 100, 'COMPLETED', '2023-05-20', 8),
        ('BMW X5, Insurance, 48 hours ', 100, 'COMPLETED', '2023-04-06', 8),
        ('BMW X3, Insurance, 48 hours ', 100, 'COMPLETED', '2023-03-08', 8),
-       ('Toyota Rav 4, Insurance, 48 hours ', 100, 'COMPLETED', '2023-02-10', 8),
+       ('Toyota Rav 4, Insurance, 48 hours ', 100, 'COMPLETED', '2023-02-10', 8)
 ;

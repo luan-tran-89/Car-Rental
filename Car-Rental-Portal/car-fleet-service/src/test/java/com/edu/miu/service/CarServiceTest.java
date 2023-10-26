@@ -452,36 +452,45 @@ public class CarServiceTest {
     @DisplayName("JUnit test for getAllRentalHistory method.")
     @Test
     void getAllRentalHistory_Success() {
-        circuitBreaker = Mockito.mock(CircuitBreaker.class);
-        given(breakerFactory.create(any()))
-                .willReturn(circuitBreaker);
-        given(circuitBreaker.run(any(), any()))
+//        circuitBreaker = Mockito.mock(CircuitBreaker.class);
+//        given(breakerFactory.create(any()))
+//                .willReturn(circuitBreaker);
+//        given(circuitBreaker.run(any(), any()))
+//                .willReturn(new ArrayList<>());
+
+        given(rentalClient.getAllRentals())
                 .willReturn(new ArrayList<>());
         carService.getAllRentalHistory();
-        verify(circuitBreaker, times(1)).run(any(), any());
+        verify(rentalClient, times(1)).getAllRentals();
     }
 
     @DisplayName("JUnit test for getRentalHistoryByUserId method.")
     @Test
     void getRentalHistoryByUserId_Success() {
-        circuitBreaker = Mockito.mock(CircuitBreaker.class);
-        given(breakerFactory.create(any()))
-                .willReturn(circuitBreaker);
-        given(circuitBreaker.run(any(), any()))
+//        circuitBreaker = Mockito.mock(CircuitBreaker.class);
+//        given(breakerFactory.create(any()))
+//                .willReturn(circuitBreaker);
+//        given(circuitBreaker.run(any(), any()))
+//                .willReturn(new ArrayList<>());
+
+        given(rentalClient.getRentalsByUser(any()))
                 .willReturn(new ArrayList<>());
         carService.getRentalHistoryByUserId(1);
-        verify(circuitBreaker, times(1)).run(any(), any());
+        verify(rentalClient, times(1)).getRentalsByUser(any());
     }
 
     @DisplayName("JUnit test for getRentalHistoryByCarId method.")
     @Test
     void getRentalHistoryByCarId_Success() {
-        circuitBreaker = Mockito.mock(CircuitBreaker.class);
-        given(breakerFactory.create(any()))
-                .willReturn(circuitBreaker);
-        given(circuitBreaker.run(any(), any()))
+//        circuitBreaker = Mockito.mock(CircuitBreaker.class);
+//        given(breakerFactory.create(any()))
+//                .willReturn(circuitBreaker);
+//        given(circuitBreaker.run(any(), any()))
+//                .willReturn(new ArrayList<>());
+
+        given(rentalClient.getRentalsByCar(any()))
                 .willReturn(new ArrayList<>());
         carService.getRentalHistoryByCarId(1);
-        verify(circuitBreaker, times(1)).run(any(), any());
+        verify(rentalClient, times(1)).getRentalsByCar(any());
     }
 }
