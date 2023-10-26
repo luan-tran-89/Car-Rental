@@ -30,7 +30,7 @@ public class PaymentMethod {
     private String cvv;
 
     @Column(name = "approval_amount", nullable = false)
-    private Double approvalAmount;
+    private Double approvalAmount = 3000.0;
 
     @Column(name = "used_amount", nullable = false)
     private Double usedAmount = 0.0;
