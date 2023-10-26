@@ -19,7 +19,7 @@ public interface PaymentMethodMapper {
             visa.setExpiryDate(dto.getExpiryDate());
             // Add other field mappings as needed...
             return visa;
-        } else if (dto.getCardType() == CardType.MASTERCARD) {
+        } else if (dto.getCardType() == CardType.MASTER_CARD) {
             MasterCardPaymentMethod mastercard = new MasterCardPaymentMethod();
             mastercard.setMethodId(dto.getMethodId());
             mastercard.setUserId(dto.getUserId());

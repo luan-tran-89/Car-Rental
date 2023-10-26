@@ -20,7 +20,7 @@ public class PaymentMethodConverter {
         if (paymentMethod instanceof VisaPaymentMethod) {
             paymentMethodDTO.setCardType(CardType.VISA);
         } else if (paymentMethod instanceof MasterCardPaymentMethod) {
-            paymentMethodDTO.setCardType(CardType.MASTERCARD);
+            paymentMethodDTO.setCardType(CardType.MASTER_CARD);
         }
 
         return paymentMethodDTO;
@@ -32,7 +32,7 @@ public class PaymentMethodConverter {
 
         if (paymentMethodDTO.getCardType() == CardType.VISA) {
             paymentMethod = new VisaPaymentMethod();
-        } else if (paymentMethodDTO.getCardType() == CardType.MASTERCARD) {
+        } else if (paymentMethodDTO.getCardType() == CardType.MASTER_CARD) {
             paymentMethod = new MasterCardPaymentMethod();
         } else {
             throw new IllegalArgumentException("Unsupported Card Type");
