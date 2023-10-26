@@ -1,6 +1,8 @@
 package com.edu.miu.service;
 
 import com.edu.miu.domain.PaymentMethod;
+import com.edu.miu.dto.BusinessException;
+import com.edu.miu.dto.PaymentMethodDTO;
 import com.edu.miu.enums.CardType;
 
 import java.util.List;
@@ -9,24 +11,24 @@ import java.util.Optional;
 public interface PaymentMethodService {
 
     // Create a new payment method
-    PaymentMethod createPaymentMethod(PaymentMethod paymentMethod);
+    PaymentMethodDTO createPaymentMethod(PaymentMethodDTO paymentMethod) throws BusinessException;
 
     // Update an existing payment method
-    PaymentMethod updatePaymentMethod(PaymentMethod paymentMethod);
+    PaymentMethodDTO updatePaymentMethod(Integer methodId, PaymentMethodDTO paymentMethod) throws BusinessException;
 
     // Retrieve a specific payment method by ID
-    Optional<PaymentMethod> findById(Integer methodId);
+    Optional<PaymentMethodDTO> findById(Integer methodId);
 
     // Delete a payment method by ID
     void deleteById(Integer methodId);
 
     // Retrieve all payment methods for a specific user
-    List<PaymentMethod> findByUserId(Integer userId);
+    List<PaymentMethodDTO> findByUserId(Integer userId);
 
-    Optional<PaymentMethod> findByCardNumber(String cardNumber);
+    Optional<PaymentMethodDTO> findByCardNumber(String cardNumber);
 
     // Retrieve all payment methods for a specific Card Type
-    List<PaymentMethod> findByCardType(CardType cardType);
+    List<PaymentMethodDTO> findByCardType(CardType cardType);
 
     // Other methods as required by your business logic...
 }

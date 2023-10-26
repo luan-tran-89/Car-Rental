@@ -1,5 +1,6 @@
 package com.edu.miu.service;
 
+import com.edu.miu.dto.ReportFilter;
 import com.edu.miu.enums.ReportFormat;
 import com.edu.miu.enums.TimeReport;
 
@@ -20,7 +21,7 @@ public interface ReportService {
     byte[] getCarReport(int carId, ReportFormat format);
 
 
-    List<Object> getCarRentalReport(TimeReport timeReport);
+    List<Object> getCarRentalReport(ReportFilter reportFilter);
 
-    byte[] exportCarRentalReport(TimeReport timeReport, ReportFormat format);
+    byte[] exportCarRentalReport(ReportFilter reportFilter, ReportFormat format);
 }

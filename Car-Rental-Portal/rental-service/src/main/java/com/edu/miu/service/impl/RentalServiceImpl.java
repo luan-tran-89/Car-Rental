@@ -376,7 +376,7 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public List<Rental> fetchRentalsByTimeReport(ReportFilter reportFilter) {
+    public List<RentalDto> fetchRentalsByTimeReport(ReportFilter reportFilter) {
         Calendar cal = Calendar.getInstance();
 
         Date startDate;
@@ -401,7 +401,7 @@ public class RentalServiceImpl implements RentalService {
                 cal.set(Calendar.DAY_OF_MONTH, 1);
                 startDate = cal.getTime();
 
-                cal.add(Calendar.MONTH, 3);
+                cal.add(Calendar.MONTH, startMonth + 2);
                 cal.add(Calendar.DAY_OF_MONTH, -1);
                 endDate = cal.getTime();
                 break;
@@ -419,7 +419,7 @@ public class RentalServiceImpl implements RentalService {
                 throw new IllegalArgumentException("Unsupported Time Report");
         }
 
-        return rentalRepository.findByStartDateBetween(startDate, endDate);
+        return this.convertFromRental(rentalRepository.findByStartDateBetween(startDate, endDate));
     }
 
 

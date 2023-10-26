@@ -1,6 +1,7 @@
 package com.edu.miu.service;
 
 import com.edu.miu.client.RentalClient;
+import com.edu.miu.dto.ReportFilter;
 import com.edu.miu.enums.ReportFormat;
 import com.edu.miu.enums.TimeReport;
 import com.edu.miu.service.impl.ReportServiceImpl;
@@ -41,6 +42,11 @@ public class ReportServiceTest {
     @Mock
     private CircuitBreaker circuitBreaker;
 
+    @Mock
+    private RentalClient rentalClient;
+
+    ReportFilter reportFilter = new ReportFilter();
+
     @BeforeEach
     void setUp() {
     }
@@ -58,24 +64,26 @@ public class ReportServiceTest {
     @DisplayName("JUnit test for getCarRentalReport method.")
     @Test
     void getCarRentalReport_Success() {
-        given(breakerFactory.create(any()))
-                .willReturn(circuitBreaker);
-        given(circuitBreaker.run(any(), any()))
+//        given(breakerFactory.create(any()))
+//                .willReturn(circuitBreaker);
+//        given(circuitBreaker.run(any(), any()))
+//                .willReturn(new ArrayList<>());
+        given(rentalClient.getRentalReport(any()))
                 .willReturn(new ArrayList<>());
-        List<Object> result = reportService.getCarRentalReport(TimeReport.ANNUAL);
-        verify(circuitBreaker, times(1)).run(any(), any());
+        List<Object> result = reportService.getCarRentalReport(reportFilter);
+        verify(rentalClient, times(1)).getRentalReport(any());
         assertEquals(result != null, true);
     }
 
     @DisplayName("JUnit test for exportCarRentalReport method.")
     @Test
     void exportCarRentalReport_Success() {
-        given(breakerFactory.create(any()))
-                .willReturn(circuitBreaker);
-        given(circuitBreaker.run(any(), any()))
+//        given(breakerFactory.create(any()))
+//                .willReturn(circuitBreaker);
+        given(rentalClient.getRentalReport(any()))
                 .willReturn(new ArrayList<>());
 
-        byte[] result = reportService.exportCarRentalReport(TimeReport.ANNUAL, ReportFormat.XML);
+        byte[] result = reportService.exportCarRentalReport(reportFilter, ReportFormat.XML);
         assertEquals(result != null, true);
     }
 

@@ -3,6 +3,7 @@ package com.edu.miu.service.impl;
 import com.edu.miu.client.RentalClient;
 import com.edu.miu.dto.CarDto;
 import com.edu.miu.dto.RentalDto;
+import com.edu.miu.dto.ReportFilter;
 import com.edu.miu.enums.ReportFormat;
 import com.edu.miu.enums.TimeReport;
 import com.edu.miu.model.BusinessException;
@@ -77,17 +78,17 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<Object> getCarRentalReport(TimeReport timeReport) {
+    public List<Object> getCarRentalReport(ReportFilter reportFilter) {
 //        CircuitBreaker circuitBreaker = breakerFactory.create("reservations-fetching");
 //        var data = circuitBreaker.run(() -> rentalClient.getRentalReport(timeReport), throwable -> null);
-        List<Object> data = rentalClient.getRentalReport(timeReport);
+        List<Object> data = rentalClient.getRentalReport(reportFilter);
         return data == null ? new ArrayList<>() : data;
     }
 
     @Override
-    public byte[] exportCarRentalReport(TimeReport timeReport, ReportFormat format) {
+    public byte[] exportCarRentalReport(ReportFilter reportFilter, ReportFormat format) {
         try {
-            var rentalReport = this.getCarRentalReport(timeReport);
+            var rentalReport = this.getCarRentalReport(reportFilter);
             var data = rentalReport.stream()
                     .map(r -> modelMapper.map(r, RentalDto.class)).collect(Collectors.toList());
 
@@ -102,7 +103,7 @@ public class ReportServiceImpl implements ReportService {
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
 
             Map<String, Object> params = new HashMap<>();
-            params.put("title", String.format("Car Rental Report - %s", timeReport));
+            params.put("title", String.format("Car Rental Report - %s", reportFilter.getTimeReport()));
 
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data);
 

@@ -2,11 +2,10 @@ package com.edu.miu.controller;
 
 import com.edu.miu.dto.PaymentMethodDTO;
 import com.edu.miu.dto.RentalDto;
+import com.edu.miu.dto.ReportFilter;
 import com.edu.miu.dto.ReservationDTO;
-import com.edu.miu.mapper.RentalMapper;
 import com.edu.miu.service.RentalService;
 import com.edu.miu.domain.Rental;
-import com.edu.miu.dto.ReservationDTO;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -25,7 +24,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/rentals")
 @Tag(name = "Rental Service", description = "Business Rental Service")
-@OpenAPIDefinition(servers = { @Server(url = "/payment-methods")},
+@OpenAPIDefinition(servers = { @Server(url = "/rentals")},
         info = @Info(title = "Car Rental System - Rental Service", version = "v1",
                 description = "This is a documentation for the Rental Service",
                 license = @License(name = "Apache 2.0", url = "http://car-fleet-license.com"),
@@ -35,9 +34,6 @@ public class RentalController {
 
     @Autowired
     private RentalService rentalService;
-    @Autowired
-    private RentalMapper rentalMapper;
-
 
     // Method to reserve a car.
     @PostMapping("/reserve")
@@ -157,6 +153,12 @@ public class RentalController {
             @RequestParam("paymentMethodId") Integer paymentMethodId) {
         Rental booking = rentalService.directBooking(carId, userId, startDate, endDate, paymentMethodId);
         return new ResponseEntity<>(booking, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/rental-history")
+    public ResponseEntity<List<RentalDto>> getRentalHistory(ReportFilter reportFilter) {
+        List<RentalDto> rentals = rentalService.fetchRentalsByTimeReport(reportFilter);
+        return ResponseEntity.ok(rentals);
     }
 
   /*  @GetMapping("/car/{carId}")
