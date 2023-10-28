@@ -5,8 +5,6 @@ import com.edu.miu.dto.CarDto;
 import com.edu.miu.dto.RentalDto;
 import com.edu.miu.dto.ReportFilter;
 import com.edu.miu.enums.ReportFormat;
-import com.edu.miu.enums.TimeReport;
-import com.edu.miu.model.BusinessException;
 import com.edu.miu.model.CarFilter;
 import com.edu.miu.service.CarService;
 import com.edu.miu.service.ReportService;
@@ -16,12 +14,15 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.modelmapper.ModelMapper;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Connection;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,8 @@ public class ReportServiceImpl implements ReportService {
     private final CircuitBreakerFactory breakerFactory;
 
     private final ModelMapper modelMapper;
+
+    private final ResourceLoader resourceLoader;
 
     @Override
     public byte[] getCarReport(int carId, ReportFormat format) {
@@ -79,9 +82,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public List<Object> getCarRentalReport(ReportFilter reportFilter) {
-//        CircuitBreaker circuitBreaker = breakerFactory.create("reservations-fetching");
-//        var data = circuitBreaker.run(() -> rentalClient.getRentalReport(timeReport), throwable -> null);
-        List<Object> data = rentalClient.getRentalReport(reportFilter);
+        CircuitBreaker circuitBreaker = breakerFactory.create("reservations-fetching");
+        var data = circuitBreaker.run(() -> rentalClient.getRentalReport(reportFilter), throwable -> null);
+//        List<Object> data = rentalClient.getRentalReport(reportFilter);
         return data == null ? new ArrayList<>() : data;
     }
 
@@ -92,15 +95,12 @@ public class ReportServiceImpl implements ReportService {
             var data = rentalReport.stream()
                     .map(r -> modelMapper.map(r, RentalDto.class)).collect(Collectors.toList());
 
-//            List<RentalDto> rentalReport = new ArrayList<>();
-//            Date today = new Date();
-//            rentalReport.add(new RentalDto(1, 1, 5, today, today, 1, 200.0));
-//            rentalReport.add(new RentalDto(2, 2, 6, today, today, 2, 100.0));
-//            rentalReport.add(new RentalDto(3, 3, 7, today, today, 3, 300.0));
-//            rentalReport.add(new RentalDto(4, 4, 8, today, today, 4, 400.0));
+            Resource resource = resourceLoader.getResource("classpath:reports/CarRentalReport.jrxml");
+            InputStream inputStream = resource.getInputStream();
 
-            File file = ResourceUtils.getFile("classpath:reports/CarRentalReport.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+//            File file = ResourceUtils.getFile("classpath:reports/CarRentalReport.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+
 
             Map<String, Object> params = new HashMap<>();
             params.put("title", String.format("Car Rental Report - %s", reportFilter.getTimeReport()));
@@ -111,6 +111,8 @@ public class ReportServiceImpl implements ReportService {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (JRException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

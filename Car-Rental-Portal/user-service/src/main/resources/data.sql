@@ -23,7 +23,28 @@ VALUES ('admin', 'admin@miu.edu', 'admin', 'admin', '20612346482',
         'FREQUENT_RENTER', 'ACTIVE', 'SILVER'),
        ('Gold customer', 'customer4@miu.edu', 'Gold', 'Thomas', '2053446486',
         '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', -- 123
-        'FREQUENT_RENTER', 'ACTIVE', 'GOLD')
+        'FREQUENT_RENTER', 'ACTIVE', 'GOLD'),
+       ('Jenny', 'jenny@miu.edu', 'customer', 'Jenny', '2061986486',
+        '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', -- 123
+        'CUSTOMER', 'ACTIVE', 'NONE'),
+       ('Lucy', 'lucy@miu.edu', 'customer', 'Lucy', '2098746486',
+        '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', -- 123
+        'CUSTOMER', 'ACTIVE', 'NONE'),
+       ('Eddie', 'eddie@miu.edu', 'customer', 'Eddie', '2063467486',
+        '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', -- 123
+        'CUSTOMER', 'ACTIVE', 'NONE'),
+       ('Maria', 'maria@miu.edu', 'customer', 'Maria', '2066546486',
+        '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', -- 123
+        'CUSTOMER', 'ACTIVE', 'NONE'),
+       ('Happy', 'happy@miu.edu', 'customer', 'Happy', '2049846486',
+        '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', -- 123
+        'CUSTOMER', 'ACTIVE', 'NONE'),
+       ('Steve', 'steve@miu.edu', 'customer', 'Steve', '2023646486',
+        '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', -- 123
+        'CUSTOMER', 'ACTIVE', 'NONE'),
+       ('Loki', 'loki@miu.edu', 'customer', 'Loki', '208616486',
+        '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', -- 123
+        'CUSTOMER', 'ACTIVE', 'NONE')
 ;
 
 

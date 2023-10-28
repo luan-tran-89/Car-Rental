@@ -1,0 +1,1889 @@
+{
+	"info": {
+		"_postman_id": "682e25ee-c499-4e07-912a-3fcdedc26494",
+		"name": "Car-Rental",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "481606",
+		"_collection_link": "https://speeding-station-230090.postman.co/workspace/Car-Rental-System~39d04f63-8e35-4449-81ee-b38ae9bc026a/collection/481606-682e25ee-c499-4e07-912a-3fcdedc26494?action=share&source=collection_link&creator=481606"
+	},
+	"item": [
+		{
+			"name": "Authen",
+			"item": [
+				{
+					"name": "Local",
+					"item": [
+						{
+							"name": "Login Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonResponse = pm.response.json();",
+											"// pm.environment.set(\"access_token\", jsonResponse.access_token);",
+											"// pm.environment.set(\"id_token\", jsonResponse.id_token);",
+											"// pm.environment.set(\"refresh_token\", jsonResponse.refresh_token);",
+											"",
+											"pm.globals.set(\"access_token\", jsonResponse.access_token);",
+											"pm.globals.set(\"refresh_token\", jsonResponse.refresh_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"admin@miu.edu\",\n    \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/uaa"
+							},
+							"response": []
+						},
+						{
+							"name": "Login Manager",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonResponse = pm.response.json();",
+											"// pm.environment.set(\"access_token\", jsonResponse.access_token);",
+											"// pm.environment.set(\"id_token\", jsonResponse.id_token);",
+											"// pm.environment.set(\"refresh_token\", jsonResponse.refresh_token);",
+											"",
+											"pm.globals.set(\"access_token\", jsonResponse.access_token);",
+											"pm.globals.set(\"refresh_token\", jsonResponse.refresh_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"manager@miu.edu\",\n    \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/uaa"
+							},
+							"response": []
+						},
+						{
+							"name": "Login Customer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonResponse = pm.response.json();",
+											"// pm.environment.set(\"access_token\", jsonResponse.access_token);",
+											"// pm.environment.set(\"id_token\", jsonResponse.id_token);",
+											"// pm.environment.set(\"refresh_token\", jsonResponse.refresh_token);",
+											"",
+											"pm.globals.set(\"access_token\", jsonResponse.access_token);",
+											"pm.globals.set(\"refresh_token\", jsonResponse.refresh_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"customer@miu.edu\",\n    \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/uaa"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Demo",
+					"item": [
+						{
+							"name": "Login Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonResponse = pm.response.json();",
+											"// pm.environment.set(\"access_token\", jsonResponse.access_token);",
+											"// pm.environment.set(\"id_token\", jsonResponse.id_token);",
+											"// pm.environment.set(\"refresh_token\", jsonResponse.refresh_token);",
+											"",
+											"pm.globals.set(\"access_token\", jsonResponse.access_token);",
+											"pm.globals.set(\"refresh_token\", jsonResponse.refresh_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"admin@miu.edu\",\n    \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{auth-service}}/uaa"
+							},
+							"response": []
+						},
+						{
+							"name": "Login Manager",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonResponse = pm.response.json();",
+											"// pm.environment.set(\"access_token\", jsonResponse.access_token);",
+											"// pm.environment.set(\"id_token\", jsonResponse.id_token);",
+											"// pm.environment.set(\"refresh_token\", jsonResponse.refresh_token);",
+											"",
+											"pm.globals.set(\"access_token\", jsonResponse.access_token);",
+											"pm.globals.set(\"refresh_token\", jsonResponse.refresh_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"manager@miu.edu\",\n    \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{auth-service}}/uaa"
+							},
+							"response": []
+						},
+						{
+							"name": "Login customer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonResponse = pm.response.json();",
+											"// pm.environment.set(\"access_token\", jsonResponse.access_token);",
+											"// pm.environment.set(\"id_token\", jsonResponse.id_token);",
+											"// pm.environment.set(\"refresh_token\", jsonResponse.refresh_token);",
+											"",
+											"pm.globals.set(\"access_token\", jsonResponse.access_token);",
+											"pm.globals.set(\"refresh_token\", jsonResponse.refresh_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"customer@miu.edu\",\n    \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{auth-service}}/uaa"
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh Token",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"refreshToken\": \"{{refresh_token}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{auth-service}}/uaa/refreshToken"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Local",
+					"item": [
+						{
+							"name": "Get Customer",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:8081/users?email=customer@miu.edu",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "customer@miu.edu"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Customer",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": "localhost:8081/users/list"
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Managers",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": "localhost:8081/users/manager/list"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Manager",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"manager1@gmail.com\",\n    \"userName\": \"Johny\",\n    \"firstName\": \"Manager\",\n    \"lastName\": \"Test 1\",\n    \"phone\": \"2061234565\",\n    \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8081/users/manager/add"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Customer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"userName\": \"test2\",\n    \"email\": \"test2@gmail.com\",\n    \"firstName\": \"User\",\n    \"lastName\": \"Test 2\",\n    \"phone\": \"20698764456\",\n    \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8081/users/register"
+							},
+							"response": []
+						},
+						{
+							"name": "Update User By Itself",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"userName\": \"Updated user\",\n    \"email\": \"updated_customer@miu.edu\",\n    \"firstName\": \"Updated User\",\n    \"lastName\": \"Updated Test\",\n    \"phone\": \"2068888888\",\n    \"password\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8081/users/update"
+							},
+							"response": []
+						},
+						{
+							"name": "Update User By Admin or Manager",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"userName\": \"Updated manager\",\n    \"email\": \"updated_manager@miu.edu\",\n    \"firstName\": \"Updated manager\",\n    \"lastName\": \"Updated manager\",\n    \"phone\": \"2068888889\",\n    \"password\": \"1234\",\n    \"userRole\": \"MANAGER\",\n    \"frequentRenterType\": \"GOLD\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8081/users/manager/update/5"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Cards",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:8081/users/card",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"users",
+										"card"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "customer@miu.edu",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Card",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"cardHolderName\": \"Johny\",\n    \"cardNumber\": \"3456789212\",\n    \"expirationDate\": \"07/2025\",\n    \"cvv\": \"123\",\n    \"cardType\": \"VISA\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8081/users/addCard"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Card",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"cardNumber\": \"9876543210\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8081/users/card/update/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Card",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": "localhost:8081/users/card/delete/9"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Demo",
+					"item": [
+						{
+							"name": "Get Customer",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-gateway}}{{user-service}}/users?email=gear@miu.edu",
+									"host": [
+										"{{api-gateway}}{{user-service}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "gear@miu.edu"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Customer",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-gateway}}{{user-service}}/users/list",
+									"host": [
+										"{{api-gateway}}{{user-service}}"
+									],
+									"path": [
+										"users",
+										"list"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "admin@miu.edu",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Managers",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-gateway}}{{user-service}}/users/manager/list",
+									"host": [
+										"{{api-gateway}}{{user-service}}"
+									],
+									"path": [
+										"users",
+										"manager",
+										"list"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "admin@miu.edu",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User By Id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": "{{api-gateway}}{{user-service}}/users/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Manager",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-gateway}}{{user-service}}/users?email=kevin@gmail.com",
+									"host": [
+										"{{api-gateway}}{{user-service}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "kevin@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Reservations",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-gateway}}{{user-service}}/users/reservations",
+									"host": [
+										"{{api-gateway}}{{user-service}}"
+									],
+									"path": [
+										"users",
+										"reservations"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "gear@miu.edu",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Reservations Copy",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-gateway}}{{user-service}}/users/rental-history",
+									"host": [
+										"{{api-gateway}}{{user-service}}"
+									],
+									"path": [
+										"users",
+										"rental-history"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "gear@miu.edu",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Customer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"userName\": \"test100\",\n    \"email\": \"popo@gmail.com\",\n    \"firstName\": \"User\",\n    \"lastName\": \"Test 2\",\n    \"phone\": \"20698764456\",\n    \"password\": \"123\",\n    \"frequentRenterType\":\"GOLD\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{user-service}}/users/register"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Manager",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"manager2@gmail.com\",\n    \"userName\": \"jijo\",\n    \"firstName\": \"Manager\",\n    \"lastName\": \"Test 1\",\n    \"phone\": \"2061234565\",\n    \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{user-service}}/users/manager/add"
+							},
+							"response": []
+						},
+						{
+							"name": "Disable Customer",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"manager1@gmail.com\",\n    \"userName\": \"Johny\",\n    \"firstName\": \"Manager\",\n    \"lastName\": \"Test 1\",\n    \"phone\": \"2061234565\",\n    \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{user-service}}/users/disable/customer1@miu.edu"
+							},
+							"response": []
+						},
+						{
+							"name": "Disable Manager",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"manager1@gmail.com\",\n    \"userName\": \"Johny\",\n    \"firstName\": \"Manager\",\n    \"lastName\": \"Test 1\",\n    \"phone\": \"2061234565\",\n    \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{user-service}}/users/manager/disable/manager4@miu.edu"
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh Token",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"refreshToken\": \"{{refresh_token}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{user-service}}/users/refreshToken"
+							},
+							"response": []
+						},
+						{
+							"name": "Add Card",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"cardHolderName\": \"johnte\",\n    \"cardNumber\": \"2342324234\",\n    \"expirationDate\": \"07/2025\",\n    \"cvv\": \"123\",\n    \"cardType\": \"VISA\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{user-service}}/users/addCard"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Card",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"cardNumber\": \"100000000000\",\n    \"cardHolderName\": \"Loin\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{user-service}}/users/updateCard/9"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Card",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{api-gateway}}{{user-service}}/users/deleteCard/9"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Car Service",
+			"item": [
+				{
+					"name": "Local",
+					"item": [
+						{
+							"name": "Get Car by Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "localhost:8082/car-fleet/car/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Search cars",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8082/car-fleet/car/search?make=BMW",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"car-fleet",
+										"car",
+										"search"
+									],
+									"query": [
+										{
+											"key": "model",
+											"value": "X7",
+											"disabled": true
+										},
+										{
+											"key": "make",
+											"value": "BMW"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Car Maintenance",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"startDate\": \"10/01/2023\",\n    \"endDate\": \"10/10/2023\",\n    \"description\": \"Daily maintenance\",\n    \"status\": \"WAITING\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8082/car-fleet/maintenance/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Car Maintenance History",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8082/car-fleet/maintenance-history?carId=1",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"car-fleet",
+										"maintenance-history"
+									],
+									"query": [
+										{
+											"key": "carId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Car Rental Report",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:8084/car-fleet/car-rental-report?timeReport=ANNUAL&format=PDF&year=2023",
+									"host": [
+										"localhost"
+									],
+									"port": "8084",
+									"path": [
+										"car-fleet",
+										"car-rental-report"
+									],
+									"query": [
+										{
+											"key": "timeReport",
+											"value": "ANNUAL"
+										},
+										{
+											"key": "timeReport",
+											"value": "MONTHLY",
+											"disabled": true
+										},
+										{
+											"key": "format",
+											"value": "PDF"
+										},
+										{
+											"key": "year",
+											"value": "2023"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export Car Rental Report",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:8082/car-fleet/export-car-rental-report?year=2023&timeReport=ANNUAL&format=PDF",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"car-fleet",
+										"export-car-rental-report"
+									],
+									"query": [
+										{
+											"key": "year",
+											"value": "2023"
+										},
+										{
+											"key": "timeReport",
+											"value": "ANNUAL"
+										},
+										{
+											"key": "format",
+											"value": "PDF"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Car",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"model\": \"Madza\",\n    \"make\": \"CX101\",\n    \"status\": \"AVAILABLE\",\n    \"fixedCost\": 50,\n    \"costPerDay\": 20\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8082/car-fleet"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Demo",
+					"item": [
+						{
+							"name": "Search cars",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api-gateway}}{{car-fleet-service}}/car-fleet/car/search?model=X7&make=BMW",
+									"host": [
+										"{{api-gateway}}{{car-fleet-service}}"
+									],
+									"path": [
+										"car-fleet",
+										"car",
+										"search"
+									],
+									"query": [
+										{
+											"key": "model",
+											"value": "X7"
+										},
+										{
+											"key": "make",
+											"value": "BMW"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Cars",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api-gateway}}{{car-fleet-service}}/car-fleet/car/search",
+									"host": [
+										"{{api-gateway}}{{car-fleet-service}}"
+									],
+									"path": [
+										"car-fleet",
+										"car",
+										"search"
+									],
+									"query": [
+										{
+											"key": "model",
+											"value": "X7",
+											"disabled": true
+										},
+										{
+											"key": "make",
+											"value": "BMW",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Car by Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{api-gateway}}{{car-fleet-service}}/car-fleet/car/5"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Rental History By Car Id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{api-gateway}}{{car-fleet-service}}/car-fleet/rental-history/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Rental History By Car Id Copy",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{api-gateway}}{{car-fleet-service}}/car-fleet/rental-history/user/9"
+							},
+							"response": []
+						},
+						{
+							"name": "Add Car",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"model\": \"Toyota\",\n    \"make\": \"CX101\",\n    \"status\": \"AVAILABLE\",\n    \"fixedCost\": 50,\n    \"costPerDay\": 20\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{car-fleet-service}}/car-fleet"
+							},
+							"response": []
+						},
+						{
+							"name": "Add Car With Image",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "car",
+											"value": "{\n    \"model\": \"Madza\",\n    \"make\": \"CX5\",\n    \"status\": \"AVAILABLE\",\n    \"fixedCost\": 50,\n    \"costPerDay\": 20\n}5",
+											"type": "text"
+										},
+										{
+											"key": "img",
+											"type": "file",
+											"src": "/Users/gasieugru/Downloads/Mazda_CX5.jpeg"
+										},
+										{
+											"key": "file",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": "localhost:8082/car-fleet/add"
+							},
+							"response": []
+						},
+						{
+							"name": "Add Image to Car",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "img",
+											"type": "file",
+											"src": "/Users/gasieugru/Downloads/bmw_x1.jpeg"
+										}
+									]
+								},
+								"url": "{{api-gateway}}{{car-fleet-service}}/car-fleet/addImage/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Car",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"model\": \"Nissan\",\n    \"make\": \"Kinoo\",\n    \"status\": \"AVAILABLE\",\n    \"baseCost\": 50,\n    \"perDayCost\": 30\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{car-fleet-service}}/car-fleet/5"
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Car",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{api-gateway}}{{car-fleet-service}}/car-fleet/3"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Car Maintenance History",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-gateway}}{{car-fleet-service}}/car-fleet/maintenance-history?carId=1",
+									"host": [
+										"{{api-gateway}}{{car-fleet-service}}"
+									],
+									"path": [
+										"car-fleet",
+										"maintenance-history"
+									],
+									"query": [
+										{
+											"key": "carId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Car Maintenance",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"startDate\": \"10/14/2023\",\n    \"endDate\": \"10/20/2023\",\n    \"description\": \"Daily Maintenance\",\n    \"status\": \"IN_PROGRESS\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{car-fleet-service}}/car-fleet/maintenance/2"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Car Maintenance Copy",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": 3,\n    \"status\": \"FINISHED\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{car-fleet-service}}/car-fleet/maintenance/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Car Rental Report",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-gateway}}{{car-fleet-service}}/car-fleet/car-rental-report?timeReport=ANNUAL&year=2023",
+									"host": [
+										"{{api-gateway}}{{car-fleet-service}}"
+									],
+									"path": [
+										"car-fleet",
+										"car-rental-report"
+									],
+									"query": [
+										{
+											"key": "timeReport",
+											"value": "ANNUAL"
+										},
+										{
+											"key": "timeReport",
+											"value": "MONTHLY",
+											"disabled": true
+										},
+										{
+											"key": "format",
+											"value": "PDF",
+											"disabled": true
+										},
+										{
+											"key": "year",
+											"value": "2023"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export Car Rental Report",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-gateway}}{{car-fleet-service}}/car-fleet/export-car-rental-report?timeReport=ANNUAL&format=PDF&year=2023",
+									"host": [
+										"{{api-gateway}}{{car-fleet-service}}"
+									],
+									"path": [
+										"car-fleet",
+										"export-car-rental-report"
+									],
+									"query": [
+										{
+											"key": "timeReport",
+											"value": "ANNUAL"
+										},
+										{
+											"key": "timeReport",
+											"value": "MONTHLY",
+											"description": "MONTHLY, QUARTERLY, ANNUAL",
+											"disabled": true
+										},
+										{
+											"key": "format",
+											"value": "PDF"
+										},
+										{
+											"key": "year",
+											"value": "2023"
+										},
+										{
+											"key": "month",
+											"value": "10",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Rental Service",
+			"item": [
+				{
+					"name": "Demo",
+					"item": [
+						{
+							"name": "Get All Rentals",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{api-gateway}}{{rental-service}}/rentals"
+							},
+							"response": []
+						},
+						{
+							"name": "Get User reservations",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": "{{api-gateway}}{{rental-service}}/rentals/user/5/reservations"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Rentals By CarId",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{api-gateway}}{{rental-service}}/rentals/car/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Rentals By CarId Copy",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-gateway}}{{rental-service}}/rentals/rental-history?month=10&year=2023&timeReport=MONTHLY",
+									"host": [
+										"{{api-gateway}}{{rental-service}}"
+									],
+									"path": [
+										"rentals",
+										"rental-history"
+									],
+									"query": [
+										{
+											"key": "month",
+											"value": "10"
+										},
+										{
+											"key": "quarter",
+											"value": "4",
+											"disabled": true
+										},
+										{
+											"key": "year",
+											"value": "2023"
+										},
+										{
+											"key": "timeReport",
+											"value": "QUARTERLY",
+											"disabled": true
+										},
+										{
+											"key": "timeReport",
+											"value": "MONTHLY"
+										},
+										{
+											"key": "timeReport",
+											"value": "ANNUAL",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reserve Car",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"carId\": \"10\",\n    \"userId\": \"9\",\n    \"startDate\": \"10/26/2023\",\n    \"endDate\": \"10/30/2023\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{rental-service}}/rentals/reserve"
+							},
+							"response": []
+						},
+						{
+							"name": "Reserve Car Copy",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"carId\": \"1\",\n    \"userId\": \"1\",\n    \"startDate\": \"10/16/2023\",\n    \"endDate\": \"10/25/2023\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{rental-service}}/rentals/create"
+							},
+							"response": []
+						},
+						{
+							"name": "Reserve",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"carId\": 7,\n  \"userId\": 5,\n  \"startDate\": \"2023-10-25\",\n  \"endDate\": \"2023-10-25\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{rental-service}}/rentals/reserve"
+							},
+							"response": []
+						},
+						{
+							"name": "addRental",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"carId\": 9,\n  \"userId\": 6,\n  \n  \"paymentId\": 7\n  \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{api-gateway}}{{rental-service}}/rentals/create"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "AWS",
+			"item": [
+				{
+					"name": "Upload File in S3",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/gasieugru/Downloads/oranization.png"
+								},
+								{
+									"key": "car",
+									"value": "{\"model\": \"Madza\", \"make\": \"CX101\", \"status\": \"AVAILABLE\", \"fixedCost\": 50,\"costPerDay\": 20}",
+									"type": "text"
+								}
+							]
+						},
+						"url": "localhost:8082/aws/storage/uploadFile"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete File in S3",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "url",
+									"value": "https://s3.amazonaws.com/pm-car-rental/1697593923614-oranization.png",
+									"type": "text"
+								}
+							]
+						},
+						"url": "localhost:8082/aws/storage/deleteFile"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PaymentMethod",
+			"item": [
+				{
+					"name": "addPayment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \n  \"cardNumber\": \"23423423\",\n  \"expiryDate\": \"23/2023\",\n  \"cvv\": \"233\",\n  \"cardType\": \"VISA\",\n  \"userId\": \"8\" \n  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{api-gateway}}{{payment-service}}/payment-methods"
+					},
+					"response": []
+				},
+				{
+					"name": "Update payment method",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": \"4345678122\",\n  \"expiryDate\": \"11/2026\",\n  \"cvv\": \"234\",\n  \"approvalAmount\": 3000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{api-gateway}}{{payment-service}}/payment-methods/23"
+					},
+					"response": []
+				},
+				{
+					"name": "getUserPaymentMethod",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{api-gateway}}{{payment-service}}/payment-methods/1"
+					},
+					"response": []
+				},
+				{
+					"name": "deletePaymentMethod",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{api-gateway}}{{payment-service}}/payment-methods/1"
+					},
+					"response": []
+				},
+				{
+					"name": "getUserPaymentMethod",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": "{{api-gateway}}{{payment-service}}/payment-methods/users/4"
+					},
+					"response": []
+				},
+				{
+					"name": "updatePaymentMethod",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "Add payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"methodId\": 7,\n  \"paymentAmount\": 2000,\n  \"transactionDate\": \"2023-10-26\",\n  \"description\": \"rented a car\",\n  \"status\": \"COMPLETED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{api-gateway}}{{payment-service}}/payments"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

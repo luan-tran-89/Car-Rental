@@ -445,7 +445,7 @@ public class UserServiceTest {
     @DisplayName("JUnit test for getAllManagers method.")
     @Test
     void getAllCustomers_Success() {
-        given(userRepository.findByUserRole(any()))
+        given(userRepository.findByUserRoleIn(any()))
                 .willReturn(new ArrayList<>());
         List<UserDto> result = userService.getAllCustomers();
         assertThat(result.size()).isEqualTo(0);
