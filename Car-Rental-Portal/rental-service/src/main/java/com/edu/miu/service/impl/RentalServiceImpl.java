@@ -338,11 +338,17 @@ public class RentalServiceImpl implements RentalService {
         return !activeRentals.isEmpty();
     }
 
-    @Override
+ /*   @Override
     public List<RentalDto> getReservationsByUser(Integer userId) {
         List<Rental> activeRentals = rentalRepository.findByUserIdAndEndDateAfter(userId, new Date());
         return this.convertFromRental(activeRentals);
     }
+*/
+ @Override
+ public List<RentalDto> getReservationsByUser(Integer userId) {
+     List<Rental> activeRentals = rentalRepository.findByUserIdAndStartDateNotBefore(userId, new Date());
+     return this.convertFromRental(activeRentals);
+ }
 
 
     private long daysBetween(Date d1, Date d2) {
