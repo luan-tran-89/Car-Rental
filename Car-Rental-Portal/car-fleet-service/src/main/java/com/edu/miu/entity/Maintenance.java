@@ -39,5 +39,6 @@ public class Maintenance {
     private String description;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", columnDefinition = "ENUM('IN_PROGRESS', 'FINISHED') default 'IN_PROGRESS'")
     private MaintenanceStatus status = MaintenanceStatus.IN_PROGRESS;
 }

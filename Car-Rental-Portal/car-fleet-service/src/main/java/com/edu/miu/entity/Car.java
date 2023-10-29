@@ -34,7 +34,7 @@ public class Car {
     private String image;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", columnDefinition = "ENUM('AVAILABLE', 'RESERVED', 'PICKED', 'UNDER_MAINTENANCE', 'DISABLED') default 'AVAILABLE'", nullable = false)
     private CarStatus status = CarStatus.AVAILABLE;
 
     @Column(name="fixed_cost", nullable = false)
