@@ -41,15 +41,15 @@ public class User {
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_role")
+    @Column(name = "user_role", columnDefinition = "ENUM('ADMIN', 'MANAGER', 'CUSTOMER', 'FREQUENT_RENTER') default 'CUSTOMER'")
     private Role userRole;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", columnDefinition = "")
+    @Column(name = "status", columnDefinition = "ENUM('ACTIVE', 'DISABLE', 'DELETE') default 'ACTIVE'")
     private UserStatus status;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "frequent_rental_type", columnDefinition = "")
+    @Column(name = "frequent_renter_type", columnDefinition = "ENUM('NONE', 'BRONZE', 'SILVER', 'GOLD') default 'NONE'")
     private FrequentRenterType frequentRenterType = FrequentRenterType.NONE;
 
 }
