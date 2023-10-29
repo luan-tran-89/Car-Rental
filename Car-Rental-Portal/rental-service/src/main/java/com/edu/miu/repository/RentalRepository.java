@@ -23,5 +23,8 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
     List<Rental> findByUserIdAndPaymentIdIsNull(Integer userId);
     List<Rental> findByStartDateBetween(Date startDate, Date endDate);
 
+    List<Rental> findByUserIdAndStartDateNotBefore(Integer userId, Date today);
+
+
 
 }
